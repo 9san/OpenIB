@@ -1,7 +1,7 @@
 OpenIB Reloaded
 ========================================================
 
-[Changelist](https://github.com/9san/OpenIB-Reloaded/blob/master/CHANGELIST.md)
+[Changelist](../master/CHANGELIST.md)
 ------------
 
 
