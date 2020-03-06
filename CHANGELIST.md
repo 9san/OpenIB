@@ -9,6 +9,8 @@
 - Improved multi-file layout
 - Improved mobile feel
 - Improved overall design
+- Ukko indexed boards only
+- Sitemap indexed boards only
 - Custom assets fixes
 - Custom sage text
 - Global/Blotter/Board Announcements
