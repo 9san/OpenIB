@@ -1,4 +1,11 @@
 <?php
+
+if (php_sapi_name() != 'cli') {
+	header('HTTP/1.0 403 Forbidden', true, 403);
+	$forbidden = file_get_contents(__dir__ . '/403', TRUE);
+    exit($forbidden);
+}
+
 include 'inc/functions.php';
 if (php_sapi_name() == 'fpm-fcgi') {
         error('Cannot be run directly.');
@@ -70,4 +77,4 @@ foreach($boards as $board) {
 
 }
 $body = Element("8chan/claim.html", array("config" => $config, "delete" => $delete));
-file_write("claim.html", Element("page.html", array("config" => $config, "body" => $body, "title" => _("Claim a Board"), "subtitle" => _("Be patient, follow the process, and claim a board"))));
+file_write("claim", Element("page.html", array("config" => $config,"boardlist" => createBoardlist(), "body" => $body, "title" => _("Claim a Board"), "subtitle" => _("Be patient, follow the process, and claim a board"))));

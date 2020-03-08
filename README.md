@@ -1,11 +1,6 @@
 OpenIB Reloaded
 ========================================================
 
-[Changelist](../master/CHANGELIST.md)
-------------
-
-
-
 About
 ------------
 OpenIB Reloaded is a fork of OpenIB which is a fork of Infinity which is a fork of vichan which is a fork of Tinyboard. OpenIB Reloaded is a revival of the now dead forks Infinity and OpenIB. Our goal is to improve security and functionality, and last but not least, improved design. A running instance can be found at [9san.ch](https://9san.ch/) 
@@ -27,7 +22,7 @@ A computer running a Unix or Unix-like OS (OpenIB Reloaded has been specifically
 Step 1. Create OpenIB Reloaded's database from the included install.sql file. Enter mysql and create an empty database named 'openib'. Then cd into the openib base directory and run:
 ```
 mysql -uroot -p openib < install.sql
-echo '1.0b' > .installed
+echo 'OpenIB-Reloaded-0.9b' > .installed
 ```
 
 Step 2. Now open secrets.php and edit the $config['db'] settings to point to the 'openib' MySQL database you created in Step 1. 'user' and 'password' refer to your MySQL login credentials.  It should look something like this when you're finished:

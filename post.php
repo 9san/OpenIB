@@ -74,11 +74,11 @@ if (isset($_POST['delete'])) {
 			if (isset($_POST['file'])) {
 				// Delete just the file
 				deleteFile($id);
-				modLog("User deleted file from his own post #$id");
+				modLog("User deleted file from their own post #$id");
 			} else {
 				// Delete entire post
 				deletePost($id);
-				modLog("User deleted his own post #$id");
+				modLog("User deleted their own post #$id");
 			}
 			
 			_syslog(LOG_INFO, 'Deleted post: ' .
@@ -377,9 +377,9 @@ elseif (isset($_POST['post'])) {
 					($post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root']) .
 					($board['dir'] . $config['dir']['res'] .
 						($p['thread'] ?
-							$p['thread'] . '.html#' . $p['id']
+							$p['thread'] . '#' . $p['id']
 						:
-							$p['id'] . '.html'
+							$p['id']
 						))
 				));
 			}
@@ -389,9 +389,9 @@ elseif (isset($_POST['post'])) {
 					($post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root']) .
 					($board['dir'] . $config['dir']['res'] .
 						($p['thread'] ?
-							$p['thread'] . '.html#' . $p['id']
+							$p['thread'] . '#' . $p['id']
 						:
-							$p['id'] . '.html'
+							$p['id']
 						))
 				));
 			}
@@ -405,7 +405,7 @@ elseif (isset($_POST['post'])) {
 		if ($config['field_disable_email'])
 			$_POST['email'] = '';
 
-		if ($config['field_email_selectbox'] && $_POST['email'] != 'sage')
+		if ($config['field_email_selectbox'] && !(($_POST['email'] == 'sage') || ($_POST['email'] == 'spoiler')))
 			$_POST['email'] = '';
 	
 		if ($config['field_disable_password'])
@@ -856,7 +856,12 @@ elseif (isset($_POST['post'])) {
 			$file['width'] = $image->size->width;
 			$file['height'] = $image->size->height;
 			
-			if ($config['spoiler_images'] && isset($_POST['spoiler'])) {
+			
+			if (strtolower($post['email']) == 'spoiler') {
+			$_POST['spoiler'] = true;
+			}
+			
+			if (($config['spoiler_images'] && isset($_POST['spoiler'])) || ($config['spoiler_images'] && (strtolower($post['email']) == 'spoiler'))) {
 				$file['thumb'] = 'spoiler';
 				
 				$size = @getimagesize($config['spoiler_image']);
@@ -927,9 +932,9 @@ elseif (isset($_POST['post'])) {
 					($post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root']) .
 					($board['dir'] . $config['dir']['res'] .
 						($p['thread'] ?
-							$p['thread'] . '.html#' . $p['id']
+							$p['thread'] . '#' . $p['id']
 						:
-							$p['id'] . '.html'
+							$p['id']
 						))
 				));
 			}
@@ -940,9 +945,9 @@ elseif (isset($_POST['post'])) {
 					($post['mod'] ? $config['root'] . $config['file_mod'] . '?/' : $config['root']) .
 					($board['dir'] . $config['dir']['res'] .
 						($p['thread'] ?
-							$p['thread'] . '.html#' . $p['id']
+							$p['thread'] . '#' . $p['id']
 						:
-							$p['id'] . '.html'
+							$p['id']
 						))
 				));
 			}

@@ -145,7 +145,7 @@
 			$_body .= '<fieldset><legend>' .
 					sprintf(ngettext('%d result in', '%d results in', $query->rowCount()), 
 					$query->rowCount()) . ' <a href="/' .
-					sprintf($config['board_path'], $board['uri']) . $config['file_index'] .
+					sprintf($config['board_path'], $board['uri']) .
 			'">' .
 			sprintf($config['board_abbreviation'], $board['uri']) . ' - ' . $board['title'] .
 			'</a></legend>' . $temp . '</fieldset>';
@@ -159,6 +159,7 @@
 		
 	echo Element('page.html', Array(
 		'config'=>$config,
+		'boardlist' => createBoardlist(),
 		'title'=>_('Search'),
 		'body'=>'' . $body
 	));

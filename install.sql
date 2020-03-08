@@ -350,6 +350,18 @@ CREATE TABLE IF NOT EXISTS `tor_cookies` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `torlist`
+--
+
+CREATE TABLE IF NOT EXISTS `torlist` (
+  `count` int NOT NULL AUTO_INCREMENT,
+  `ip` varchar(255) NOT NULL,
+  PRIMARY KEY (`ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `dnsbl_bypass`
 --
 

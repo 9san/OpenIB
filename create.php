@@ -10,9 +10,14 @@ $password = base64_encode(openssl_random_pseudo_bytes(9));
 
 $captcha = generate_captcha($config['captcha']['extra']);
 
-$body = Element("8chan/create.html", array("config" => $config, "password" => $password, "captcha" => $captcha));
-
-echo Element("page.html", array("config" => $config, "body" => $body, "title" => _("Create your board"), "subtitle" => _("before someone else does")));
+if ($config['board_create'] === true) {
+	$body = Element("8chan/create.html", array("config" => $config,  "password" => $password, "captcha" => $captcha));
+	echo Element("page.html", array("config" => $config, "boardlist" => createBoardlist(), "body" => $body, "title" => _("Create your board"), "subtitle" => _("before someone else does")));
+}
+else {
+	$body = '<div style="text-align:center">:(</div>';
+	echo Element("page.html", array("config" => $config, "boardlist" => createBoardlist(), "body" => $body, "title" => _("Create your board"), "subtitle" => _("Temporarily Disabled")));
+}
 }
 
 else {
@@ -107,6 +112,6 @@ _syslog(LOG_NOTICE, "New board: $uri");
 
 $body = Element("8chan/create_success.html", array("config" => $config, "password" => $_POST['password'], "uri" => $uri));
 
-echo Element("page.html", array("config" => $config, "body" => $body, "title" => _("Success"), "subtitle" => _("This was a triumph")));
+echo Element("page.html", array("config" => $config, "boardlist" => createBoardlist(), "body" => $body, "title" => _("Success"), "subtitle" => _("This was a triumph")));
 }
 ?>

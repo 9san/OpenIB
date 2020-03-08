@@ -1,9 +1,15 @@
 <?php
 
+if (php_sapi_name() != 'cli') {
+	header('HTTP/1.0 403 Forbidden', true, 403);
+	$forbidden = file_get_contents(__dir__ . '/403', TRUE);
+    exit($forbidden);
+}
+
 include "inc/functions.php";
 
 $admin         = isset($mod["type"]) && $mod["type"]<=30;
-$founding_date = "October 23, 2013";
+$founding_date = "January 30, 2020";
 
 if (php_sapi_name() == 'fpm-fcgi' && !$admin && count($_GET) == 0) {
 	error('Cannot be run directly.');
@@ -104,7 +110,7 @@ $searchArray = array(
 		"posts_total"    => $posts_total,
 		
 		"founding_date"  => $founding_date,
-		"page_updated"   => date('r'),
+		"page_updated"   => date('D, d M Y H:i:00 O'),
 		
 		"html_boards"    => $boardsHTML,
 		"html_tags"      => $tagsHTML,
@@ -114,17 +120,20 @@ $searchArray = array(
 $searchHTML = Element("8chan/boards-index.html", $searchArray);
 
 $pageHTML = Element("page.html", array(
-		"title" => "8chan, the infinitely expanding imageboard",
+		"title" => "9channel, the Sanctuary",
 		"config" => $config,
+		"boardlist" => createBoardlist(),
 		"body"   => $searchHTML,
+		"frontpage" => true,
 	)
 );
 
 $searchHTML2 = Element("8chan/boards-search.html", $searchArray);
 
 $pageHTML2 = Element("page.html", array(
-		"title" => "Boards on 8chan",
+		"title" => "Boards on 9san",
 		"config" => $config,
+		"boardlist" => createBoardlist(),
 		"body"   => $searchHTML2,
 	)
 );
@@ -137,7 +146,7 @@ if (php_sapi_name() == 'cli') {
 	$nonAssociativeBoardList = array_values($response['boardsFull']);
 	
 	file_write("index.html", $pageHTML);
-	file_write("boards.html", $pageHTML2);
+	file_write("boards", $pageHTML2);
 	file_write("boards.json", json_encode($nonAssociativeBoardList));
 	
 	$topbar = array();
@@ -148,6 +157,7 @@ if (php_sapi_name() == 'cli') {
 	}
 	
 	file_write("boards-top20.json", json_encode(array_splice($topbar, 0, 48)));
-}
+
 
 echo $pageHTML;
+}
