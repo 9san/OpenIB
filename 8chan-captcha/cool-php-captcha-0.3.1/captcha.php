@@ -31,10 +31,10 @@ class SimpleCaptcha {
      * directory to another location outise the web server
      *
      */
-    public $resourcesPath = '8chan-captcha/cool-php-captcha-0.3.1/resources';
+    public $resourcesPath = __DIR__ . '/resources';
 
     /** Min word length (for non-dictionary random text generation) */
-    public $minWordLength = 5;
+    public $minWordLength = 4;
 
     /**
      * Max word length (for non-dictionary random text generation)
@@ -42,7 +42,7 @@ class SimpleCaptcha {
      * Used for dictionary words indicating the word-length
      * for font-size modification purposes
      */
-    public $maxWordLength = 8;
+    public $maxWordLength = 6;
 
     /** Sessionname to store the original text */
     public $session_var = 'captcha';
@@ -72,25 +72,27 @@ class SimpleCaptcha {
      * - maxSize: max font size
      */
     public $fonts = array(
-        'Antykwa'  => array('spacing' => -3, 'minSize' => 27, 'maxSize' => 30, 'font' => 'AntykwaBold.ttf'),
+        //'Antykwa'  => array('spacing' => -3, 'minSize' => 27, 'maxSize' => 30, 'font' => 'AntykwaBold.ttf'),
         'Candice'  => array('spacing' =>-1.5,'minSize' => 28, 'maxSize' => 31, 'font' => 'Candice.ttf'),
-        'DingDong' => array('spacing' => -2, 'minSize' => 24, 'maxSize' => 30, 'font' => 'Ding-DongDaddyO.ttf'),
-        'Duality'  => array('spacing' => -2, 'minSize' => 30, 'maxSize' => 38, 'font' => 'Duality.ttf'),
-        'Heineken' => array('spacing' => -2, 'minSize' => 24, 'maxSize' => 34, 'font' => 'Heineken.ttf'),
-        'Jura'     => array('spacing' => -2, 'minSize' => 28, 'maxSize' => 32, 'font' => 'Jura.ttf'),
-        'StayPuft' => array('spacing' =>-1.5,'minSize' => 28, 'maxSize' => 32, 'font' => 'StayPuft.ttf'),
+        //'DingDong' => array('spacing' => -2, 'minSize' => 24, 'maxSize' => 30, 'font' => 'Ding-DongDaddyO.ttf'),
+        //'Duality'  => array('spacing' => -2, 'minSize' => 30, 'maxSize' => 38, 'font' => 'Duality.ttf'),
+        //'Heineken' => array('spacing' => -2, 'minSize' => 24, 'maxSize' => 34, 'font' => 'Heineken.ttf'),
+		'Miglia' => array('spacing' => -2, 'minSize' => 24, 'maxSize' => 34, 'font' => 'Miglia.ttf'),
+        //'Jura'     => array('spacing' => -2, 'minSize' => 28, 'maxSize' => 32, 'font' => 'Jura.ttf'),
+        //'StayPuft' => array('spacing' =>-1.5,'minSize' => 28, 'maxSize' => 32, 'font' => 'StayPuft.ttf'),
         //'Times'    => array('spacing' => -2, 'minSize' => 28, 'maxSize' => 34, 'font' => 'TimesNewRomanBold.ttf'),
         //'VeraSans' => array('spacing' => -1, 'minSize' => 20, 'maxSize' => 28, 'font' => 'VeraSansBold.ttf'),
+		 'MITsans'  => array('spacing' =>-1.5,'minSize' => 16, 'maxSize' => 20, 'font' => 'Mit_sansv3.otf'),
     );
 
     /** Wave configuracion in X and Y axes */
     public $Yperiod    = 12;
-    public $Yamplitude = 14;
+    public $Yamplitude = 2;
     public $Xperiod    = 11;
-    public $Xamplitude = 5;
+    public $Xamplitude = 2;
 
     /** letter rotation clockwise */
-    public $maxRotation = 8;
+    public $maxRotation = 1;
 
     /**
      * Internal image size factor (for better image quality)
