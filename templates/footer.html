@@ -1,0 +1,24 @@
+	
+	{# Remember that removing, modifying, or hiding the copyright notices is a breach of license. #}
+	
+	<footer>
+		<p id="footer-copyright" class="unimportant" style="margin-top:20px;text-align:center;line-height:1.2">- <a href="http://tinyboard.org/">Tinyboard</a> + 
+			<a href='https://int.vichan.net/devel/'>vichan</a> + 
+			<a href="https://github.com/ctrlcctrlv/infinity">infinity</a> + 
+			<a href="https://github.com/OpenIB/OpenIB/">OpenIB</a> + 
+			<a href="https://github.com/9san/OpenIB-Reloaded">Reloaded</a> -
+		<br><a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2014 Tinyboard Development Group    
+		<br><a href="https://int.vichan.net/devel/">vichan</a> Copyright &copy; 2012-2014 vichan-devel
+		<br><a href="https://github.com/ctrlcctrlv/infinity">infinity</a> Copyright &copy; 2013-2015 Fredrick Brennan &amp; Infinity Development Group
+		<br><a href="https://github.com/OpenIB/OpenIB/">OpenIB</a> by <a target="_blank" href="https://twitter.com/codemonkeyz">Code Monkey ★</a>
+		<br><a href="https://github.com/9san/OpenIB-Reloaded">Reloaded</a> Copyright &copy; 2020 9san Development Group
+		<br><span style="margin-left:300px">[<a id="footer_remove" href="#">Hide</a>]</span>
+		</p>
+		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer }}</p>{% endfor %}
+		<p class="unimportant" style="margin-top:-5px;text-align:center;">
+			<a href="#" id="alert_about">About</a> • 
+			<a href="/meta/">Feedback</a> • 
+			<a href="#" id="alert_legal">Legal</a> • 
+			<a href="#" id="alert_contact">Contact</a>
+		</p>
+	</footer>

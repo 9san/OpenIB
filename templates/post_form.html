@@ -14,13 +14,13 @@
 				{% trans %}Name{% endtrans %}
 			</th>
 			<td>
-				<input type="text" name="name" size="25" maxlength="35" autocomplete="off">
+				<input type="text" name="name" size="25" maxlength="35" autocomplete="off" style="float:left;width: 200px;">
 			</td>
 		</tr>{% endif %}
 		{% endif %}
 		{% if not config.field_disable_email or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri)) %}<tr>
 			<th>
-				{% trans %}Email{% endtrans %}
+				{% trans %}Options{% endtrans %}
 			</th>
 			<td>
 				{% if config.field_email_selectbox and not (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri)) %}
@@ -28,9 +28,10 @@
 					<option value=""></option>
 					<option value="sage">sage</option>
 					{% if not config.always_noko %}<option value="noko">noko</option>{% endif %}
+					{% if config.spoiler_images %}<option value="spoiler">spoiler</option>{% endif %}
 				</select>
 				{% else %}
-				<input type="text" name="email" size="25" maxlength="40" autocomplete="off">
+				<input type="text" name="email" size="25" maxlength="40" autocomplete="off" style="float:left;width: 200px;">
 				{% endif %}
 				{% if not (not (config.field_disable_subject or (id and config.field_disable_reply_subject)) or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri))) %}
 				<input accesskey="s" style="margin-left:2px;" type="submit" name="post" value="{% if id %}{{ config.button_reply }}{% else %}{{ config.button_newtopic }}{% endif %}" />
@@ -42,7 +43,7 @@
 				{% trans %}Subject{% endtrans %} {% if config.force_subject_op and not id %}<span class="required-star">*</span>{% endif %}
 			</th>
 			<td>
-				<input style="float:left;" type="text" name="subject" size="25" maxlength="100" autocomplete="off">
+				<input style="float:left;width: 200px;" type="text" name="subject" size="25" maxlength="100" autocomplete="off">
 				<input accesskey="s" style="margin-left:2px;" type="submit" name="post" value="{% if id %}{{ config.button_reply }}{% else %}{{ config.button_newtopic }}{% endif %}" />
 			</td>
 		</tr>
@@ -52,7 +53,7 @@
 				{% trans %}Comment{% endtrans %} <span class="required-star">*</span>
 			</th>
 			<td>
-				<textarea name="body" id="body" rows="5" cols="35"></textarea>
+				<textarea name="body" id="body" rows="5" cols="35" style="width:255px"></textarea>
 				{% if not (not (config.field_disable_subject or (id and config.field_disable_reply_subject)) or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri))) %}
 				{% if not (not config.field_disable_email or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri))) %}
 				<input accesskey="s" style="margin-left:2px;" type="submit" name="post" value="{% if id %}{{ config.button_reply }}{% else %}{{ config.button_newtopic }}{% endif %}" />{% if config.spoiler_images %} <input id="spoiler" name="spoiler" type="checkbox"> <label for="spoiler">{% trans %}Spoiler Image{% endtrans %}</label>{% endif %}
@@ -71,7 +72,7 @@
 				<noscript>You seem to have JavaScript disabled. To complete the CAPTCHA,<br><a href="{{ config.captcha.provider_get }}?mode=get&amp;extra={{ config.captcha.extra }}&amp;nojs=true" target="_blank">open this link in a new tab</a> and put the result in the boxes below:
 				<br>
 				ID: <input class="captcha_cookie" type="text" name="captcha_cookie" size="25" autocomplete="off"><br>
-				Answer: <input class="captcha_text" type="text" name="captcha_text" size="25" maxlength="6" autocomplete="off">
+				Answer: <input class="captcha_text" type="text" name="captcha_text" size="25" maxlength="6" autocomplete="off" style="float:left;width: 200px;">
 				</noscript>
 			</td>
 		</tr>
@@ -136,7 +137,7 @@
 				</span>
 			</td>
 			<td class="show-options-cell">
-				<a href="#" class="show-post-table-options">[&#9654; {% trans %}Show post options &amp; limits{% endtrans %}]</a>
+				<a href="#" class="show-post-table-options">[<i class="fa fa-play"></i> {% trans %}Show post options &amp; limits{% endtrans %}]</a>
 				<strong class="faq-message unimportant hint"><br />Confused? See the <a href="/faq.html">FAQ</a>.</strong>
 			</td>
 		</tr>
@@ -177,14 +178,14 @@
 					<label><input title="No bump" id="no-bump" name="no-bump" type="checkbox">
 					{% trans %}Do not bump{% endtrans %}
 					<br/>
-					<span class="unimportant hint">{% trans %}(you can also write sage in the email field){% endtrans %}</span></label>
+					<span class="unimportant hint">{% trans %}(you can also write sage in the options field){% endtrans %}</span></label>
 				</div>
 
 				{% if config.spoiler_images %}<div class="spoiler-images-option">
 					<label><input title="Spoiler images" id="spoiler" name="spoiler" type="checkbox">
 					{% trans %}Spoiler images{% endtrans %}
 					<br/>
-					<span class="unimportant hint">{% trans %}(this replaces the thumbnails of your images with question marks){% endtrans %}</label>
+					<span class="unimportant hint">{% trans %}(you can also write spoiler in the options field){% endtrans %}</span></label>
 				</div>{% endif %}
 
 				{% if config.allow_no_country and config.country_flags and not config.force_flag %}<div class="no-country-option">
@@ -229,25 +230,16 @@
 				</div>{% endif %}
 			</td>
 		</tr>
-		{% if not config.field_disable_password or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri)) %}<tr>
-			<th>
-				{% trans %}Password{% endtrans %}
-			</th>
-			<td>
-				<input type="text" name="password" value="" size="12" maxlength="18" autocomplete="off"> 
-				<span class="unimportant hint">{% trans %}(For file and post deletion.){% endtrans %}</span>
-			</td>
-		</tr>{% endif %}
 		<tr>
 			<td colspan="2">
 				<p class="unimportant board-settings">
 				{% if not config.disable_images %}
-				{% trans %}Allowed file types:{% endtrans %}
+				{% trans %}Allowed file types:{% endtrans %} <span class="uppercase">
 				{% if config.allowed_ext_op and not id %}
 					{{ config.allowed_ext_op|join(', ') }}
 				{% else %}
 					{{ config.allowed_ext|join(', ') }}{% if config.allowed_ext_files %}, {{ config.allowed_ext_files|join(', ') }}{% endif %}
-				{% endif %}<br />
+				</span>{% endif %}<br />
 				{% trans %}Max filesize is{% endtrans %} {{ config.max_filesize|filesize }}.<br />
 				{% trans %}Max image dimensions are{% endtrans %} {{ config.max_height }} x {{ config.max_width }}.<br />
 				{% set max_images = config.max_images %} {# workaround for "The text to be translated with "trans" can only contain references to simple variables" #}
@@ -256,6 +248,15 @@
 				</p>
 			</td>
 		</tr>
+		{% if not config.field_disable_password or (mod and post.mod|hasPermission(config.mod.bypass_field_disable, board.uri)) %}<tr id="password">
+			<th>
+				{% trans %}Password{% endtrans %}
+			</th>
+			<td>
+				<input type="text" name="password" value="" size="12" maxlength="18" autocomplete="off"> 
+				<span class="unimportant hint">{% trans %}(For file and post deletion.){% endtrans %}</span>
+			</td>
+		</tr>{% endif %}
 	</tbody></table>
 </form>
 </div>

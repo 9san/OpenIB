@@ -338,16 +338,21 @@ function init() {
 		});
 	}
 
+	$( "a#showpostform" ).click(function() {
+	  $( "#post-form-outer" ).show();
+	  $( "#showpostform" ).hide();
+	});
+
 	// just enable jquery, almost every script requires it by now. more and more main.js functions are going to start requiring it
 	$('.post-table-options').css('display', 'none');
 	window.optionsShowing = false;
 	$(document).on('click', '.show-post-table-options', function(e) {
 		if (!window.optionsShowing) { 
-			$('.show-post-table-options').html('[&#9660; '+_('Hide post options &amp; limits')+']'); 
+			$('.show-post-table-options').html('[<i class="fa fa-play fa-rotate-90"></i> '+_('Hide post options &amp; limits')+']'); 
 			$('.post-table-options').css('display', 'table');
 			window.optionsShowing = true;
 		} else { 
-			$('.show-post-table-options').html('[&#9654; '+_('Show post options &amp; limits')+']'); 
+			$('.show-post-table-options').html('[<i class="fa fa-play"></i> '+_('Show post options &amp; limits')+']'); 
 			$('.post-table-options').css('display', 'none');
 			window.optionsShowing = false;
 		}; 
@@ -400,4 +405,3 @@ sc.innerHTML = 'var sc_project={{ config.statcounter_project }};var sc_invisible
 var s = document.getElementsByTagName('script')[0];
 s.parentNode.insertBefore(sc, s);
 {% endif %}
-

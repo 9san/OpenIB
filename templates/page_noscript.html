@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript">
+		active_page = "none";
+	</script>
+	<title>{{ title }}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+	<link rel="stylesheet" media="screen" href="/stylesheets/font-awesome/css/font-awesome.min.css">
+</head>
+<body class="9san {% if mod %}is-moderator{% else %}is-not-moderator{% endif %} stylesheet-{% if config.default_stylesheet.1 != '' and not mod %}{{ config.default_stylesheet.1 }}{% else %}default{% endif %} active-none">
+	{{ boardlist.top }}
+	{% if pm %}<div class="top_notice">You have <a href="?/PM/{{ pm.id }}">an unread PM</a>{% if pm.waiting > 0 %}, plus {{ pm.waiting }} more waiting{% endif %}.</div><hr>{% endif %}
+	<div id="main-top"><header>
+		{% if config.site_logo %}
+		<figure id="logo">
+			<a id="logo-link" href="/" title="Return to the front page">
+				<img id="logo-img" src="{{config.site_logo}}" alt="{{config.site_nane}}" />
+			</a>
+		</figure>
+		{% endif %}
+		
+		{% if title %}<h1>{{ title }}</h1>{% endif %}
+		<div class="subtitle">
+			{% if subtitle %}
+				{{ subtitle }}
+			{% endif %}
+			{% if mod and not hide_dashboard_link %}<p><a href="?/">{% trans %}Return to dashboard{% endtrans %}</a></p>{% endif %}
+		</div>
+	</header></div>
+		{{ body }}
+	<hr>
+	{{ boardlist.bottom }}
+	{% include 'footer.html' %}
+</body>
+</html>

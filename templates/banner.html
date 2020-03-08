@@ -1,0 +1,4 @@
+{% if config.url_banner %}
+<img id="banner_img" class="board_image" {% if config.banner_width or config.banner_height %}style="{% if config.banner_width %}width:{{ config.banner_width }}px{% endif %};{% if config.banner_width %}height:{{ config.banner_height }}px{% endif %}" {% endif %}alt=""/>
+<script>getRandomImage("banner_img");</script>
+{% endif %}

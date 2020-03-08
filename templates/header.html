@@ -1,36 +1,37 @@
-		<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}">
-		{% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.root }}{{ config.url_favicon }}">{% endif %}
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-		{% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
-		{% if config.meta_description %}<meta name="description" content="{{ config.meta_description }}">{% endif %}
-		{% if board and not board.indexed %}<meta name="robots" content="noindex" />{% endif %}
-		{% if config.default_stylesheet.1 != '' and not mod %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}">{% endif %}
-		{% if config.font_awesome %}<link rel="stylesheet" media="screen" href="{{ config.root }}{{ config.font_awesome_css }}">{% endif %}
-		{% if config.country_flags_condensed %}<link rel="stylesheet" href="{{ config.root }}{{ config.country_flags_condensed_css }}">{% endif %}
-		<script type="text/javascript">
-			var configRoot="{{ config.root }}";
-			var inMod = {% if mod %}true{% else %}false{% endif %};
-			var modRoot="{{ config.root }}"+(inMod ? "mod.php?/" : "");
-			var max_images={{ config.max_images }};
-			{% raw %}
-			var styles = {
-				{% endraw %}
-				{% for name, uri in config.stylesheets %}{% raw %}'{% endraw %}{{ name|addslashes }}{% raw %}' : '{% endraw %}/stylesheets/{{ uri|addslashes }}{% raw %}',
-				{% endraw %}{% endfor %}{% raw %}
-			};
-			{% endraw %}
-		</script>
-		{% if config.locale != "en" %}
-			<script type="text/javascript" src="{{ config.root }}inc/locale/{{ config.locale|split('.')[0] }}/LC_MESSAGES/javascript.js"></script>
-		{% endif %}
-		{% if not nojavascript %}
-			<script type="text/javascript" src="{{ config.url_javascript }}"></script>
-			{% if not config.additional_javascript_compile %}
-			{% for javascript in config.additional_javascript %}<script type="text/javascript" src="{{ config.additional_javascript_url }}{{ javascript }}"></script>{% endfor %}
-			{% endif %}
-                        {% if config.emoji_enable %}
-                                <script type="text/javascript" src="/{{ config.additional_javascript.emoji }}"></script>
-                        {% endif %}
-		{% endif %}
-		{% if config.katex %}<script type="text/javascript" src="/js/mathjax/MathJax.js?config=8chanTeX"></script>{% endif %}
+<script type="text/javascript">
+	var configRoot="{{ config.root }}";
+	var inMod = {% if mod %}true{% else %}false{% endif %};
+	var modRoot="{{ config.root }}"+(inMod ? "mod.php?/" : "");
+	var max_images={{ config.max_images }};
+	{% raw %}
+	var styles = {
+		{% endraw %}
+		{% for name, uri in config.stylesheets %}{% raw %}'{% endraw %}{{ name|addslashes }}{% raw %}' : '{% endraw %}/stylesheets/{{ uri|addslashes }}{% raw %}',
+		{% endraw %}{% endfor %}{% raw %}
+	};
+	{% endraw %}
+	var global_banner="{% if config.url_banner_global %}true{% else %}false{% endif %}";
+</script>
+<link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}">
+{% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.root }}{{ config.url_favicon }}">{% endif %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+{% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
+{% if config.meta_description %}<meta name="description" content="{{ config.meta_description }}">{% endif %}
+{% if board and not board.indexed and not ukko %}<meta name="robots" content="noindex" />{% endif %}
+{% if config.default_stylesheet.1 != '' and not mod %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}">{% endif %}
+{% if config.font_awesome %}<link rel="stylesheet" media="screen" href="{{ config.root }}{{ config.font_awesome_css }}">{% endif %}
+{% if config.country_flags_condensed %}<link rel="stylesheet" href="{{ config.root }}{{ config.country_flags_condensed_css }}">{% endif %}
+{% if config.locale != "en" %}
+	<script type="text/javascript" src="{{ config.root }}inc/locale/{{ config.locale|split('.')[0] }}/LC_MESSAGES/javascript.js"></script>
+{% endif %}
+{% if not nojavascript %}
+	<script type="text/javascript" src="{{ config.url_javascript }}"></script>
+	{% if not config.additional_javascript_compile %}
+	{% for javascript in config.additional_javascript %}<script type="text/javascript" src="{{ config.additional_javascript_url }}{{ javascript }}"></script>{% endfor %}
+	{% endif %}
+                      {% if config.emoji_enable %}
+                              <script type="text/javascript" src="/{{ config.additional_javascript.emoji }}"></script>
+                      {% endif %}
+{% endif %}
+{% if config.katex %}<script type="text/javascript" src="/js/mathjax/MathJax.js?config=8chanTeX"></script>{% endif %}

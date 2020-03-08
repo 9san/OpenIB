@@ -12,20 +12,20 @@
 
 	{% set meta_subject %}{% if config.thread_subject_in_title and thread.subject %}{{ thread.subject|e }}{% else %}{{ thread.body_nomarkup[:256]|remove_modifiers|e }}{% endif %}{% endset %}
 
-	<meta name="description" content="8chan /{{ board.uri }}/ - {{ board.title|e }} - {{ meta_subject }}" />
+	<meta name="description" content="9san /{{ board.uri }}/ - {{ board.title|e }} - {{ meta_subject }}" />
 	<meta name="twitter:card" value="summary">
 	<meta property="og:title" content="{{ meta_subject }}" />
 	<meta property="og:type" content="article" />
-	<meta property="og:url" content="https://8ch.net/{{ board.uri }}/{{ config.dir.res }}{{ thread.id }}.html" />
-	{% if thread.files.0.thumb %}<meta property="og:image" content="https://8ch.net/{{ board.uri }}/{{ config.dir.thumb }}{{ thread.files.0.thumb }}" />{% endif %}
+	<meta property="og:url" content="https://9san.ch/{{ board.uri }}/{{ config.dir.res }}{{ thread.id }}" />
+	{% if thread.files.0.thumb %}<meta property="og:image" content="https://9san.ch/{{ board.uri }}/{{ config.dir.thumb }}{{ thread.files.0.thumb }}" />{% endif %}
 	<meta property="og:description" content="{{ thread.body_nomarkup|e }}" />
 
 	<title>{{ board.url }} - {{ meta_subject }}</title>
 </head>
-<body class="8chan {% if mod %}is-moderator{% else %}is-not-moderator{% endif %} active-thread" data-stylesheet="{% if config.default_stylesheet.1 != '' and not mod %}{{ config.default_stylesheet.1 }}{% else %}default{% endif %}">
+<body class="9san {% if mod %}is-moderator{% else %}is-not-moderator{% endif %} active-thread" data-stylesheet="{% if config.default_stylesheet.1 != '' and not mod %}{{ config.default_stylesheet.1 }}{% else %}default{% endif %}">
 	{{ boardlist.top }}
 	{% if pm %}<div class="top_notice">You have <a href="?/PM/{{ pm.id }}">an unread PM</a>{% if pm.waiting > 0 %}, plus {{ pm.waiting }} more waiting{% endif %}.</div><hr />{% endif %}
-	{% if config.url_banner %}<img class="board_image" src="{{ config.url_banner }}/random/{{ board.uri|url_encode }}" {% if config.banner_width or config.banner_height %}style="{% if config.banner_width %}width:{{ config.banner_width }}px{% endif %};{% if config.banner_width %}height:{{ config.banner_height }}px{% endif %}" {% endif %}alt="" />{% endif %}
+	{% include 'banner.html' %}
 	<header>
 		<h1>{{ board.url }} - {{ board.title|e }}</h1>
 		<div class="subtitle">
@@ -36,26 +36,35 @@
 					{{ board.subtitle|e }}
 				{% endif %}
 			{% endif %}
+			{% if mod and post.mod|hasPermission(config.mod.edit_settings, board.uri) %}<p><a href="?/settings/{{ board.uri|url_encode }}">{% trans %}Board Settings{% endtrans %}</a></p>{% endif %}
 			{% if mod %}<p><a href="?/">{% trans %}Return to dashboard{% endtrans %}</a></p>{% endif %}
-			<p><a href="{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">Catalog</a></p>
 		</div>
 	</header>
 
 	{% include 'attention_bar.html' %}
 
 	{% if config.announcement %}
-		{{ config.announcement }}
+		<hr/><div class="blotter">{{ config.announcement }}</div><hr/>
 	{% endif %}
 
-	<div class="banner">{% trans %}Posting mode: Reply{% endtrans %} <a href="{{ return }}">[{% trans %}Return{% endtrans %}]</a> <a href="{% if mod %}?{% endif %}{{ config.root }}{{ board.uri }}/{{ config.dir.res }}{{ thread.id }}.html#bottom">[{% trans %}Go to bottom {% endtrans %}]</a> <a href="{% if mod %}?{% endif %}{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">[{% trans %}Catalog{% endtrans %}]</a> <a target="_blank" href="https://nerv.8ch.net">[{% trans %}Nerve Center{% endtrans %}]</a></div>
+	<div class="banner">{% trans %}Posting mode: Reply{% endtrans %} <a href="{{ return }}">[{% trans %}Return{% endtrans %}]</a> <a href="{% if mod %}?{% endif %}{{ config.root }}{{ board.uri }}/{{ config.dir.res }}{{ thread.id }}#bottom">[{% trans %}Go to bottom {% endtrans %}]</a> <a href="{% if mod %}?{% endif %}{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">[{% trans %}Catalog{% endtrans %}]</a></div>
 
 	{% include 'ad_top.html' %}
-
+	{% if config.hide_postform %}
+		<style>#post-form-outer{display:none}</style>
+		<div id="showpostform">[<a href="#" id="showpostform">Post a Reply</a>]</div>
+	{% endif %}
 	{% include 'post_form.html' %}
-
+	{% include 'announcements_blotter.html' %}
 	{% if config.global_message %}<hr /><div class="blotter">{{ config.global_message }}</div>{% endif %}
+		<hr />
+	<div id="thread-interactions">
+			<span id="thread-links-top">
+				[<a id="thread-return" href="{{ return }}">{% trans %}Return{% endtrans %}</a>]<span class="margin-right"></span>
+				[<a id="thread-bottom" href="#bottom">{% trans %}Bottom{% endtrans %}</a>]<span class="margin-right"></span>
+				[<a id="thread-catalog" href="{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">{% trans %}Catalog{% endtrans %}</a>]<span class="margin-right"></span>
+			</span>
 	<hr />
-	
 	<form name="postcontrols" action="{{ config.post_url }}" method="post">
 		<input type="hidden" name="board" value="{{ board.uri }}" />
 		{% if mod %}<input type="hidden" name="mod" value="1" />{% endif %}
@@ -64,20 +73,19 @@
 		
 		<div id="thread-interactions">
 			<span id="thread-links">
-				<a id="thread-return" href="{{ return }}">[{% trans %}Return{% endtrans %}]</a>
-				<a id="thread-top" href="#top">[{% trans %}Go to top{% endtrans %}]</a>
-				<a id="thread-catalog" href="{% if mod %}?{% endif %}{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">[{% trans %}Catalog{% endtrans %}]</a>
-				<a id="nerv-center" target="_blank" href="https://nerv.8ch.net">[{% trans %}Nerve Center{% endtrans %}]</a>
+				[<a id="thread-return" href="{{ return }}">{% trans %}Return{% endtrans %}</a>]<span class="margin-right"></span>
+				[<a id="thread-top" href="#top">{% trans %}Top{% endtrans %}</a>]<span class="margin-right"></span>
+				[<a id="thread-catalog" href="{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">{% trans %}Catalog{% endtrans %}</a>]<span class="margin-right"></span>
 			</span>
 			
 			<span id="thread-quick-reply">
-				<a id="link-quick-reply" href="#">[{% trans %}Post a Reply{% endtrans %}]</a>
+				[<a id="link-quick-reply" href="#">{% trans %}Post a Reply{% endtrans %}</a>]
 			</span>
 			
 			{% include 'report_delete.html' %}
 		</div>
-		
 		<div class="clearfix"></div>
+		<hr>
 	</form>
 	
 	{{ boardlist.bottom }}
@@ -86,23 +94,12 @@
 		{% include 'ad_bottom.html' %}
 	{% endif %}
 
-	{% if board.uri %}
-		<div id="8ch-bottom"></div>
-	{% endif %}
-
-	<a id="bottom"></a>
-	<footer>
-		<p class="unimportant" style="margin-top:20px;text-align:center;">- <a href="http://tinyboard.org/">Tinyboard</a> + 
-			<a href='https://int.vichan.net/devel/'>vichan</a> {{ config.version }} -
-		<br><a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2014 Tinyboard Development Group    
-		<br><a href="https://int.vichan.net/devel/">vichan</a> Copyright &copy; 2012-2014 vichan-devel
-		<br><a href="https://8ch.net/8code/">infinity</a> Copyright &copy; 2013-2015 Fredrick Brennan &amp; Infinity Development Group
-		<br><a href="https://github.com/OpenIB/OpenIB/">OpenIB</a> by <a target="_blank" href="https://twitter.com/codemonkeyz">Code Monkey ★</a></p>
-		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer }}</p>{% endfor %}
-	</footer>
+	
+	{% include 'footer.html' %}
 
 	<script type="text/javascript">{% raw %}
 		onready(init); ready();
 	{% endraw %}</script>
+	<a id="bottom"></a>
 </body>
 </html>

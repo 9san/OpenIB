@@ -3,9 +3,9 @@
 <div id="post-form-inner">
 
 <!-- Show and hide link button for new thread form -->
-<strong style="font-size:1.3em"><a href="#" class="show-create-thread-catalog">[{% trans %}Create a thread{% endtrans %}]</a></strong>
+<strong style="font-size:1.3em">[<a href="#" class="show-create-thread-catalog">{% trans %}Start a New Thread{% endtrans %}</a>]</strong>
 
-<form name="post" onsubmit="return dopost(this);" enctype="multipart/form-data" action="https://sys.8ch.net/post.php" method="post" style="display: none;" id="create-thread-catalog">
+<form name="post" onsubmit="return dopost(this);" enctype="multipart/form-data" action="post.php" method="post" style="display: none;" id="create-thread-catalog">
 {% if id %}<input type="hidden" name="thread" value="{{ id }}">{% endif %}
 <input type="hidden" name="board" value="{{ board }}">
 <input type="hidden" name="page" value="1">
@@ -147,8 +147,7 @@
 				</span>
 			</td>
 			<td class="show-options-cell">
-				<a href="#" class="show-post-table-options">[&#9654; {% trans %}Show post options &amp; limits{% endtrans %}]</a>
-				<strong class="faq-message unimportant hint"><br />Confused? See the <a href="/faq.html">FAQ</a>.</strong>
+				<a href="#" class="show-post-table-options">[<i class="fa fa-play"></i> {% trans %}Show post options &amp; limits{% endtrans %}]</a>
 			</td>
 		</tr>
 	</tbody></table>

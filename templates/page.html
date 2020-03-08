@@ -9,7 +9,8 @@
 	{% if mod %}{% include 'mod/header.html' %}{% endif %}
 	<title>{{ title }}</title>
 </head>
-<body class="8chan {% if mod %}is-moderator{% else %}is-not-moderator{% endif %} stylesheet-{% if config.default_stylesheet.1 != '' and not mod %}{{ config.default_stylesheet.1 }}{% else %}default{% endif %} active-page">
+<body class="9san {% if frontpage %}frontpage {% endif %}{% if mod %}is-moderator{% else %}is-not-moderator{% endif %} stylesheet-{% if config.default_stylesheet.1 != '' and not mod %}{{ config.default_stylesheet.1 }}{% else %}default{% endif %} active-page">
+	{{ boardlist.top }}
 	{% if pm %}<div class="top_notice">You have <a href="?/PM/{{ pm.id }}">an unread PM</a>{% if pm.waiting > 0 %}, plus {{ pm.waiting }} more waiting{% endif %}.</div><hr>{% endif %}
 	<header>
 		{% if config.site_logo %}
@@ -30,14 +31,7 @@
 	</header>
 		{{ body }}
 	<hr>
-	<footer>
-		<p class="unimportant" style="margin-top:20px;text-align:center;">- <a href="http://tinyboard.org/">Tinyboard</a> + 
-			<a href='https://int.vichan.net/devel/'>vichan</a> {{ config.version }} -
-		<br><a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2014 Tinyboard Development Group    
-		<br><a href="https://int.vichan.net/devel/">vichan</a> Copyright &copy; 2012-2014 vichan-devel
-		<br><a href="https://8ch.net/8code/">infinity</a> Copyright &copy; 2013-2015 Fredrick Brennan &amp; Infinity Development Group
-		<br><a href="https://github.com/OpenIB/OpenIB/">OpenIB</a> by <a target="_blank" href="https://twitter.com/codemonkeyz">Code Monkey ★</a></p>
-		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer }}</p>{% endfor %}
-	</footer>
+	{{ boardlist.bottom }}
+	{% include 'footer.html' %}
 </body>
 </html>

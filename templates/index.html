@@ -3,23 +3,29 @@
 <head>
 	<meta charset="utf-8">
 
-        <script type="text/javascript">
-	{% if not no_post_form %}
+	<script type="text/javascript">
+	{% if not ukko %}
 		var active_page = "index";
-	{% else %}
+	{% endif %}
+	{% if ukko %}
 		var active_page = "ukko";
 	{% endif %}
+	{% if not ukko %}
 		var board_name="{{ board.uri }}";
-        </script>
+	{% else %}
+		var board_name="all";
+	{% endif %}
+		</script>
 
 	{% include 'header.html' %}
 	<title>{{ board.url }} - {{ board.title|e }}</title>
 </head>
-<body class="8chan {% if mod %}is-moderator{% else %}is-not-moderator{% endif %} active-{% if not no_post_form %}index{% else %}ukko{% endif %}" data-stylesheet="{% if config.default_stylesheet.1 != '' and not mod %}{{ config.default_stylesheet.1 }}{% else %}default{% endif %}">
+<body class="9san {% if mod %}is-moderator{% else %}is-not-moderator{% endif %} active-{% if not ukko %}index{% else %}ukko{% endif %}" data-stylesheet="{% if config.default_stylesheet.1 != '' and not mod %}{{ config.default_stylesheet.1 }}{% else %}default{% endif %}">
 	{{ boardlist.top }}
 	
 	{% if pm %}<div class="top_notice">You have <a href="?/PM/{{ pm.id }}">an unread PM</a>{% if pm.waiting > 0 %}, plus {{ pm.waiting }} more waiting{% endif %}.</div><hr />{% endif %}
-	{% if config.url_banner %}<img class="board_image" src="{{ config.url_banner }}/random/{{ board.uri|url_encode }}" {% if config.banner_width or config.banner_height %}style="{% if config.banner_width %}width:{{ config.banner_width }}px{% endif %};{% if config.banner_width %}height:{{ config.banner_height }}px{% endif %}" {% endif %}alt="" />{% endif %}
+	
+	{% include 'banner.html' %}
 	
 	<header>
 		<h1>{{ board.url }} - {{ board.title|e }}</h1>
@@ -31,25 +37,43 @@
 					{{ board.subtitle|e }}
 				{% endif %}
 			{% endif %}
+			{% if mod and post.mod|hasPermission(config.mod.edit_settings, board.uri) %}<p><a href="?/settings/{{ board.uri|url_encode }}">{% trans %}Board Settings{% endtrans %}</a></p>{% endif %}
 			{% if mod %}<p><a href="?/">{% trans %}Return to dashboard{% endtrans %}</a></p>{% endif %}
-			<p><a href="{% if mod %}?{% endif %}{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">{% trans %}Catalog{% endtrans %}</a></p>
 		</div>
 	</header>
 
 	{% include 'attention_bar.html' %}
 
 	{% if config.announcement %}
-		{{ config.announcement }}
+		<hr/><div class="blotter">{{ config.announcement }}</div>{% if not ukko %}<hr/>{% endif %}
 	{% endif %}
 
 	{% include 'ad_top.html' %}
 
-	{% if not no_post_form %}
+	{% if not ukko %}
+			{% if config.hide_postform %}
+				<style>#post-form-outer{display:none}</style>
+				<div id="showpostform">[<a href="#" id="showpostform">Post a New Thread</a>]</div>
+			{% endif %}
 		{% include 'post_form.html' %}
 	{% else %}
 		{% include 'boardlist.html' %}
 	{% endif %}
-
+	
+	{% include 'announcements_blotter.html' %}
+	
+	{% if config.global_message %}<hr/><div class="blotter">{{ config.global_message }}</div>{% endif %}
+	
+	{% if not ukko %}
+	<hr/>
+	<form id="search-board" autocomplete="off" style="margin-bottom:-8px;margin-top:-8px;" action="/search.php" method="get">
+		<p>	{% if board and board.indexed %}<input id="search" name="search" type="text" value="" placeholder="Search /{{ board.uri }}/" size="15" style="height: 15px;padding: 1px 0px 0px 3px;line-height: 16px;margin-bottom: 0px;width: 120px">
+				<input type="hidden" name="board" value="{{ board.uri }}">
+				<input style="display:none;" type="submit" value="Search"> 
+				{% endif %}<span style="vertical-align: middle;">[<a id="thread-catalog" href="{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">{% trans %}Catalog{% endtrans %}</a>]</span>
+		</p>
+	</form>
+	{% endif %}
 	{% if config.page_nav_top %}
 		<div class="pages top">
 			{% for page in pages %}
@@ -59,20 +83,7 @@
 		</div>
 	{% endif %}
 	
-	{% if config.global_message %}<hr /><div class="blotter">{{ config.global_message }}</div>{% endif %}
-	<hr />
-	
-	<!-- Start Search Form -->
-	{% if config.board_search %}
-        	<form style="display:inline" action="/search.php">
-                	<p style="margin: 10px;">
-                    		<input type="text" name="search" placeholder="{{ board.uri }} search">
-                    		<input type="hidden" name="board" value="{{ board.uri }}">
-                    		<input type="submit" value="Search">
-                	</p>
-        	</form>
-    	{% endif %}
-    	<!-- End Search Form -->
+	<hr/>
 	
 	<form name="postcontrols" action="{{ config.post_url }}" method="post">
 	<input type="hidden" name="board" value="{{ board.uri }}" />
@@ -83,12 +94,11 @@
 	
 	<div class="pages">
 		{{ btn.prev }} {% for page in pages %}
-		 [<a {% if page.selected %}class="selected"{% endif %}{% if not page.selected %}href="{{ page.link }}"{% endif %}>{{ page.num }}</a>]{% if loop.last %} {% endif %}
+		 [<a {% if page.selected %}class="selected" {% endif %}href="{{ page.link }}">{{ page.num }}</a>]{% if loop.last %} {% endif %}
 		{% endfor %} {{ btn.next }}
 		{% if config.catalog_link %}
-			 | <a href="{% if mod %}?{% endif %}{{ config.root }}{{ board.dir }}{{ config.catalog_link }}" target="_blank">Catalog</a>
+			 | <a href="{{ config.root }}{{ board.dir }}{{ config.catalog_link }}">Catalog</a>
 		{% endif %}
-			 | <a href="https://nerv.8ch.net/" target="_blank">{% trans %}Nerve Center{% endtrans %}</a>
 	</div>
 	
 	{{ boardlist.bottom }}
@@ -97,23 +107,11 @@
 		{% include 'ad_bottom.html' %}
 	{% endif %}
 
-	{% if board.uri %}
-		<div id="8ch-bottom"></div>
-	{% endif %}
-
-	<footer>
-		<p class="unimportant" style="margin-top:20px;text-align:center;">- <a href="http://tinyboard.org/">Tinyboard</a> + 
-			<a href='https://int.vichan.net/devel/'>vichan</a> {{ config.version }} -
-		<br><a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2014 Tinyboard Development Group
-		<br><a href="https://int.vichan.net/devel/">vichan</a> Copyright &copy; 2012-2014 vichan-devel
-		<br><a href="https://8ch.net/8code/">infinity</a> Copyright &copy; 2013-2015 Fredrick Brennan &amp; Infinity Development Group
-		<br><a href="https://github.com/OpenIB/OpenIB/">OpenIB</a> by <a target="_blank" href="https://twitter.com/codemonkeyz">Code Monkey ★</a></p>
-
-		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer }}</p>{% endfor %}
-	</footer>
+	{% include 'footer.html' %}
 
 	<script type="text/javascript">{% raw %}
 		onready(init); ready();
 	{% endraw %}</script>
+	<a id="bottom"></a>
 </body>
 </html>

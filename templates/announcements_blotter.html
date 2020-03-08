@@ -1,0 +1,15 @@
+{% if config.blotter_enabled %}<table id="blotter" class="blotter">
+	<thead><tr><td colspan="2"><hr class="aboveBlotter"/></td></tr></thead>
+	<tbody>{% for blotter_announcement in config.blotter_announcement %}
+	 {% if loop.index0 < 3 %}
+	<tr>{{ blotter_announcement }}</tr>
+	{% endif %}
+	{% endfor %}
+	</tbody>
+	<tfoot>
+	<tr style="text-align:right"><td colspan="2">[<a href="#" id="blotter_remove">Hide</a>] [<a href="/blotter">Show All</a>]</td></tr>
+	<tr><td colspan="2">{% if config.ad_top %}<hr class="aboveBlotter"/>{% endif %}</td></tr>
+	</tfoot>
+	</table>
+	<script>if (localStorage.footer_toggle === 'false') { $("#footer-copyright").show();}</script>
+{% endif %}
