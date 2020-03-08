@@ -26,16 +26,16 @@ var banlist_init = function(token, my_boards, inMod) {
     var selall = "<input type='checkbox' id='select-all' style='float: left;'>";
 
     lt = $("#banlist").longtable({
-      mask: {name: selall+_("IP address"), width: "220px", fmt: function(f) {
+      iphash: {name: selall+_("IP address"), width: "220px", fmt: function(f) {
         var pre = "";
         if (inMod && f.access) {
           pre = "<input type='checkbox' class='unban'>";
         }
 
-        if (inMod && f.single_addr && !f.masked) {
-	  return pre+"<a href='?/IP/"+f.mask+"'>"+f.mask+"</a>";
+        if (inMod && f.single_addr && !f.iphashed) {
+	  return pre+"<a href='?/IP/"+f.iphash+"'>"+f.iphash+"</a>";
 	}
-	return pre+f.mask;
+	return pre+f.iphash;
       } },
       reason: {name: _("Reason"), width: "calc(100% - 715px - 6 * 4px)", fmt: function(f) {
 	var add = "", suf = '';
@@ -89,13 +89,13 @@ var banlist_init = function(token, my_boards, inMod) {
       if ($("#search").val()) {
         var terms = $("#search").val().split(" ");
 
-        var fields = ["mask", "reason", "board", "staff", "message"];
+        var fields = ["iphash", "reason", "board", "staff", "message"];
 
         var ret_false = false;
 	terms.forEach(function(t) {
           var fs = fields;
 
-	  var re = /^(mask|reason|board|staff|message):/, ma;
+	  var re = /^(iphash|reason|board|staff|message):/, ma;
           if (ma = t.match(re)) {
             fs = [ma[1]];
 	    t = t.replace(re, "");
