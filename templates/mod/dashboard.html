@@ -54,7 +54,8 @@
 				{% if reports > 0 %}</strong>{% endif %}&nbsp;
 				{% if global_reports > 0 %}<strong>{% endif %}
 					{% if mod.type != constant('MOD') and mod.type != constant('BOARDVOLUNTEER') %}<a href="?/reports/global">Global reports ({{global_reports}})</a>{% endif %}
-				{% if reports > 0 %}</strong>{% endif %}
+				{% if global_reports > 0 %}</strong>{% endif %}
+				
 			</li>
 		{% endif %}
 		{% if mod|hasPermission(config.mod.view_banlist) %}
@@ -113,22 +114,19 @@
           {% for board in boards %}
           {% if board.uri in mod.boards and mod.boards[0] != '*' %}
 
-              {{ config.board_abbreviation|sprintf(board.uri) }} - {{ board.title|e }} - {{ board.subtitle|e }}:
-              <br>
-              <a href="?/{{ config.board_path|sprintf(board.uri) }}{{ config.file_index }}"><small>[{% trans 'index' %}]</small></a>
+              {{ config.board_abbreviation|sprintf(board.uri) }} - {{ board.title|e }}:
+              <small>[<a href="?/{{ config.board_path|sprintf(board.uri) }}">{% trans 'index' %}</a>]</small>
               &nbsp;
-              <a href="?/{{ board.uri }}/catalog.html"><small>[{% trans 'catalog' %}]</small></a>
+              <small>[<a href="?/{{ board.uri }}/catalog">{% trans 'catalog' %}</a>]</small>
               {% if mod.type == "20" %}
                 &nbsp;
-                <a href="?/settings/{{ board.uri }}"><small>[{% trans 'settings' %}]</small></a>
-                &nbsp;
-                <a href="https://banners.8ch.net/oauth_send"><small>[{% trans 'banners' %}]</small></a>
+               <small>[<a href="?/settings/{{ board.uri }}">{% trans 'settings' %}</a>]</small>
               {% endif %}
               {% if mod|hasPermission(config.mod.manageboards) %}
-                 <a href="?/edit/{{ board.uri }}"><small>[{% trans 'edit' %}]</small></a>
-                 <a href="?/settings/{{ board.uri }}"><small>[{% trans 'settings' %}]</small></a>
+                 <small>[<a href="?/edit/{{ board.uri }}">{% trans 'edit' %}</a>]</small>
+                 <small>[<a href="?/settings/{{ board.uri }}">{% trans 'settings' %}</a>]</small>
               {% endif %}
-
+				<br>
           {% endif %}
           {% endfor %}
           {% if mod.boards[0] == '*' %}

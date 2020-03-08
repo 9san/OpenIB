@@ -37,7 +37,7 @@
 			</td>
 			<td class="minimal">
 				{% if log.board %}
-					<a href="?/{{ config.board_path|sprintf(log.board) }}{{ config.file_index }}">{{ config.board_abbreviation|sprintf(log.board) }}</a>
+					<a href="?/{{ config.board_path|sprintf(log.board) }}">{{ config.board_abbreviation|sprintf(log.board) }}</a>
 				{% else %}
 					-
 				{% endif %}

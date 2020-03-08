@@ -1,4 +1,4 @@
-<script src="{{ config.additional_javascript_url }}js/mod/recent_posts.js"></script>
+<script src="{{ config.additional_javascript_url }}js/mod/recent-posts.js"></script>
 {% if not posts|count %}
 	<p style="text-align:center" class="unimportant">({% trans 'There are no active posts.' %})</p>
 {% else %}
@@ -11,7 +11,7 @@
 		{% else %}
 			{% set thread = post.thread %}
 		{% endif %}
-		<div class="post-wrapper" data-board="{{ post.board }}"><hr/><a class="eita-link" id="eita-{{ post.board }}-{{ thread }}" href="?/{{ post.board }}/res/{{ thread }}.html#{{ post.id }}">/{{ post.board }}/{{ post.id }}</a><br>
+		<div class="post-wrapper" data-board="{{ post.board }}"><hr/><a class="eita-link" id="eita-{{ post.board }}-{{ thread }}" href="?/{{ post.board }}/thread/{{ thread }}#{{ post.id }}">/{{ post.board }}/{{ post.id }}</a><br>
 			{{ post.built }}
 		</div>
 	{% endfor %}
