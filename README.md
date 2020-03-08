@@ -41,7 +41,7 @@ Step 2. Now open secrets.php and edit the $config['db'] settings to point to the
 Step 3. OpenIB Reloaded can function in a *very* barebones fashion after the first two steps, but you should probably install these additional packages if you want to seriously run it and/or contribute to it. Make sure to run the below as root:
 
 ```
-sudo yum install graphicxmagick gifsicle nginx mysql56-server php56 php56-mysql ffmpeg pear 
+sudo yum install graphicxmagick gifsicle nginx mysql71-server php71 php71-mysql ffmpeg pear 
 ```
 
 Page Generation
