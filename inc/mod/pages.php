@@ -13,6 +13,7 @@ function mod_page($title, $template, $args, $subtitle = false) {
 		'config' => $config,
 		'mod' => $mod,
 		'hide_dashboard_link' => $template == 'mod/dashboard.html',
+		'boardlist' => createBoardlist($mod),
 		'title' => $title,
 		'subtitle' => $subtitle,
 		'nojavascript' => true,
@@ -2925,7 +2926,7 @@ function mod_reports() {
 				// Build the ">>>/b/ thread reported 3 times" title.
 				$report_title = sprintf(
 					_('<a href="%s" title="View content" target="_new">&gt;&gt;&gt;/%s/</a> %s reported %d time(s).'),
-					"?/{$report_item['board_id']}/res/" . ( $content['thread'] ?: $content['id'] ) . ".html#{$content['thread']}",
+					"?/{$report_item['board_id']}/" . $config['dir']['res'] . ( $content['thread'] ?: $content['id'] ) . "#{$content['thread']}",
 					$report_item['board_id'],
 					_( $content['thread'] ? "reply" : "thread" ),
 					$content_reports
@@ -2952,7 +2953,7 @@ function mod_reports() {
 					
 					'clean'                 => $clean,
 					
-					'go_to_thread'          => "?/{$report_item['board_id']}/res/" . ( $content['thread'] ?: $content['id'] ) . ".html",
+					'go_to_thread'          => "?/{$report_item['board_id']}/" . $config['dir']['res'] . ( $content['thread'] ?: $content['id'] ),
 					
 					'uri_content_demote'    => "?/{$uri_content_base}{$report_item['board_id']}/{$content['id']}/demote",
 					'uri_content_promote'   => "?/{$uri_content_base}{$report_item['board_id']}/{$content['id']}/promote",
@@ -3814,7 +3815,7 @@ function delete_page_base($page = '', $board = false) {
 		$query->bindValue(':name', $page);
 		$query->execute() or error(db_error($query));
 
-		@file_unlink(($board ? ($board . '/') : '') . $page . '.html');
+		@file_unlink(($board ? ($board . '/') : '') . $page);
 	}
 
 	header('Location: ?/edit_pages' . ($board ? ('/' . $board) : ''), true, $config['redirect_http']);
@@ -3884,7 +3885,7 @@ function mod_edit_page($id) {
 		$query->bindValue(':id', $id);
 		$query->execute() or error(db_error($query));
 
-		$fn = ($board['uri'] ? ($board['uri'] . '/') : '') . $page['name'] . '.html';
+		$fn = ($board['uri'] ? ($board['uri'] . '/') : '') . $page['name'];
 		$body = "<div class='ban'>$write</div>";
 		$html = Element('page.html', array('config' => $config, 'body' => $body, 'title' => utf8tohtml($page['title'])));
 		file_write($fn, $html);

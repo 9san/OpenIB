@@ -39,9 +39,10 @@ function getIdentity(){
   global $config;
   $userIP = (string) $_SERVER['REMOTE_ADDR'];
   // Use a static salt for testing. Switch to a rotating salt after getIdentity() is confirmed working.
-  $hashSalt = $config['hashSalt']; // from random.org
-  $identity = crypt($userIP, '$2a$07$' . $hashSalt . '$');
-  return $identity;
+  //$hashSalt = $config['hashSalt']; // from random.org
+  //$identity = crypt($userIP, '$2a$07$' . $hashSalt . '$');
+  //return $identity;
+  return $userIP;
 }
 
 function getIdentityRange(){
@@ -51,8 +52,8 @@ function getIdentityRange(){
   array_pop($userIPrange);
   array_push($userIPrange,"0/24");
   $userIPrange = implode(".",$userIPrange);
-  $hashSalt = $config['hashSalt']; // from random.org
-  $userIPrange = crypt($userIPrange, '$2a$07$' . $hashSalt . '$');
+  //$hashSalt = $config['hashSalt']; // from random.org
+  //$userIPrange = crypt($userIPrange, '$2a$07$' . $hashSalt . '$');
   return $userIPrange;
 }
 
@@ -443,6 +444,11 @@ function rebuildThemes($action, $boardname = false) {
 	        $current_locale = $config['locale'];
 	        init_locale($config['locale'], $error);
 	}
+	
+	// Rebuild global static pages (not the same as board custom pages)
+	foreach ($config['static_theme'] as $theme) {
+		exec('/var/www/html; /usr/bin/php /var/www/html/' . $theme . '');
+	}
 }
 
 
@@ -534,6 +540,17 @@ function setupBoard($array) {
 	if (!file_exists($board['dir'] . $config['dir']['res']))
 		@mkdir($board['dir'] . $config['dir']['res'], 0777)
 			or error("Couldn't create " . $board['dir'] . $config['dir']['img'] . ". Check permissions.", true);
+	
+	$dir = 'static/assets/'. $board['uri'];	
+	if (!is_dir($dir))
+		mkdir($dir, 0777, true);
+	if (!file_exists ($dir . '/deleted.png'))
+		symlink(getcwd() . '/' . $config['image_deleted'], "$dir/deleted.png");
+	if (!file_exists ($dir . '/spoiler.png'))
+		symlink(getcwd() . '/' . $config['spoiler_image'], "$dir/spoiler.png");
+	if (!file_exists ($dir . '/no-file.png'))
+		symlink(getcwd() . '/' . $config['no_file_image'], "$dir/no-file.png");
+		
 }
 
 function openBoard($uri) {
@@ -642,7 +659,7 @@ function file_write($path, $data, $simple = false, $skip_purge = false) {
 		}
 	}
 	
-	if (!function_exists("dio_truncate")) {
+	if (function_exists("dio_truncate")) {
 		if (!$fp = fopen($path, $simple ? 'w' : 'c'))
 			error('Unable to open file for writing: ' . $path);
 		
@@ -893,7 +910,7 @@ function fetchBoardActivity( array $uris = array(), $forTime = false, $detailed 
 	if ($detailed === true) {
 		$bsQuery = prepare("SELECT `stat_uri`, `stat_hour`, `post_count`, `author_ip_array` FROM ``board_stats`` WHERE {$uriSearch} ( `stat_hour` <= :hour AND `stat_hour` >= :hoursago )");
 		$bsQuery->bindValue(':hour', $forHour, PDO::PARAM_INT);
-		$bsQuery->bindValue(':hoursago', $forHour - ( 3600 * 72 ), PDO::PARAM_INT);
+		$bsQuery->bindValue(':hoursago', $forHour - ( 3600 * 168 * 4 ), PDO::PARAM_INT);
 		$bsQuery->execute() or error(db_error($bsQuery));
 		$bsResult = $bsQuery->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -958,7 +975,7 @@ function fetchBoardActivity( array $uris = array(), $forTime = false, $detailed 
 		}
 		// Average the number of posts made for each board.
 		foreach ($boardActivity['average'] as &$activity) {
-			$activity /= 72;
+			$activity /= 672;
 		}
 	}
 	// Simple return.
@@ -1077,9 +1094,9 @@ function displayBan($ban) {
 		}
 	}
 
-	if(strpos($ban['ip'],'$2a$07$') !== false) {
+	/*if(strpos($ban['ip'],'$2a$07$') !== false) {
 		$ban['ip'] = "...".substr($ban['ip'],-8);
-	}
+	}*/
 
 	// Show banned page and exit
 	die(
@@ -1679,11 +1696,11 @@ function getPageButtons($pages, $mod=false) {
 			// Previous button
 			if ($num == 0) {
 				// There is no previous page.
-				$btn['prev'] = _('Previous');
+				$btn['prev'] = _('');
 			} else {
 				$loc = ($mod ? '?/' . $board['uri'] . '/' : '') .
 					($num == 1 ?
-						$config['file_index']
+						''
 					:
 						sprintf($config['file_page'], $num)
 					);
@@ -1733,7 +1750,7 @@ function getPages($mod=false) {
 	for ($x=0;$x<$count && $x<$config['max_pages'];$x++) {
 		$pages[] = array(
 			'num' => $x+1,
-			'link' => $x==0 ? ($mod ? '?/' : $config['root']) . $board['dir'] . $config['file_index'] : ($mod ? '?/' : $config['root']) . $board['dir'] . sprintf($config['file_page'], $x+1)
+			'link' => $x==0 ? ($mod ? '?/' : $config['root']) . $board['dir'] : ($mod ? '?/' : $config['root']) . $board['dir'] . sprintf($config['file_page'], $x+1)
 		);
 	}
 
@@ -1990,6 +2007,8 @@ function checkTorlist($ip){
         $query->execute() or error(db_error($query));
 
         return $query->fetch(PDO::FETCH_ASSOC);
+
+return true;
 }
 
 function checkDNSBL($use_ip = false) {
@@ -2206,9 +2225,9 @@ function markup(&$body, $track_cites = false, $op = false) {
 			}
 
 			if (isset($cited_posts[$cite])) {
-				$replacement = '<a onclick="highlightReply(\''.$cite.'\', event);" href="' .
+				$replacement = '<a class="cite" onclick="highlightReply(\''.$cite.'\', event);" href="' .
 					$config['root'] . $board['dir'] . $config['dir']['res'] .
-					($cited_posts[$cite] ? $cited_posts[$cite] : $cite) . '.html#' . $cite . '">' .
+					($cited_posts[$cite] ? $cited_posts[$cite] : $cite) . '#' . $cite . '">' .
 					'&gt;&gt;' . $cite .
 					'</a>';
 
@@ -2234,7 +2253,7 @@ function markup(&$body, $track_cites = false, $op = false) {
 			// Carry found posts from local board >>X links
 			foreach ($cited_posts as $cite => $thread) {
 				$cited_posts[$cite] = $config['root'] . $board['dir'] . $config['dir']['res'] .
-					($thread ? $thread : $cite) . '.html#' . $cite;
+					($thread ? $thread : $cite) . '#' . $cite;
 			}
 			
 			$cited_posts = array(
@@ -2279,11 +2298,11 @@ function markup(&$body, $track_cites = false, $op = false) {
 				
 				while ($cite = $query->fetch(PDO::FETCH_ASSOC)) {
 					$cited_posts[$_board][$cite['id']] = $config['root'] . $board['dir'] . $config['dir']['res'] .
-						($cite['thread'] ? $cite['thread'] : $cite['id']) . '.html#' . $cite['id'];
+						($cite['thread'] ? $cite['thread'] : $cite['id']) . '#' . $cite['id'];
 				}
 			}
 			
-			$crossboard_indexes[$_board] = $config['root'] . $board['dir'] . $config['file_index'];
+			$crossboard_indexes[$_board] = $config['root'] . $board['dir'];
 		}
 		
 		// Restore old board
@@ -2306,7 +2325,7 @@ function markup(&$body, $track_cites = false, $op = false) {
 				if (isset($cited_posts[$_board][$cite])) {
 					$link = $cited_posts[$_board][$cite];
 					
-					$replacement = '<a ' .
+					$replacement = '<a class="cite" ' .
 						($_board == $board['uri'] ?
 							'onclick="highlightReply(\''.$cite.'\', event);" '
 						: '') . 'href="' . $link . '">' .
@@ -2320,7 +2339,7 @@ function markup(&$body, $track_cites = false, $op = false) {
 						$tracked_cites[] = array($_board, $cite);
 				}
 			} elseif(isset($crossboard_indexes[$_board])) {
-				$replacement = '<a href="' . $crossboard_indexes[$_board] . '">' .
+				$replacement = '<a class="cite" href="' . $crossboard_indexes[$_board] . '">' .
 						'&gt;&gt;&gt;/' . $_board . '/' .
 						'</a>';
 				$body = mb_substr_replace($body, $matches[1][0] . $replacement . $matches[4][0], $matches[0][1] + $skip_chars, mb_strlen($matches[0][0]));
@@ -2332,7 +2351,8 @@ function markup(&$body, $track_cites = false, $op = false) {
 	$tracked_cites = array_unique($tracked_cites, SORT_REGULAR);
 	
 	if ($config['strip_superfluous_returns'])
-		$body = preg_replace('/\s+$/', '', $body);
+		$body = preg_replace('/^\s+|\s+$/', '', $body);
+	
 	
 	if ($config['markup_paragraphs']) {
 		$paragraphs = explode("\n", $body);
@@ -2362,13 +2382,21 @@ function markup(&$body, $track_cites = false, $op = false) {
 			if (strpos($paragraph, "&gt;")===0) {
 				$quoteClass = "quote";
 			}
+			else if (strpos($paragraph, "&lt;")===0) {
+				$quoteClass = "rquote";
+			}
 			else {
 				$quoteClass = "";
 			}
 			
 			// If tags are closed, start a new line.
 			if ($tagsOpen === false) {
-				$bodyNew .= "<p class=\"body-line {$paragraphDirection} {$quoteClass}\">";
+				if ($config['markup_paragraphs_span'] === false) {
+					$bodyNew .= "<p class=\"body-line {$paragraphDirection} {$quoteClass}\">";
+				}
+				else {
+					$bodyNew .= "<span class=\"body-line {$paragraphDirection} {$quoteClass}\">";
+				}
 			}
 			
 			// If tags are open, add the paragraph to our temporary holder instead.
@@ -2407,10 +2435,15 @@ function markup(&$body, $track_cites = false, $op = false) {
 			
 			// If tags are open, do not close it.
 			if (!$tagsOpen) {
-				$bodyNew .= "</p>";
+				if ($config['markup_paragraphs_span'] === false) {
+					$bodyNew .= "</p>";
+				}
+				else {
+					$bodyNew .= "</span><br/>";
+				}
 			}
 			else if ($tagsOpen !== false) {
-				$tagsOpen .= "<br />";
+				$tagsOpen .= "<br/>";
 			}
 		}
 		
@@ -2422,6 +2455,7 @@ function markup(&$body, $track_cites = false, $op = false) {
 	}
 	else {
 		$body = preg_replace("/^\s*&gt;.*$/m", '<span class="quote">$0</span>', $body);
+		$body = preg_replace("/^\s*&lt;.*$/m", '<span class="rquote">$0</span>', $body);
 		$body = preg_replace("/\n/", '<br/>', $body);
 	}
 	
@@ -2576,7 +2610,7 @@ function buildThread($id, $return = false, $mod = false) {
 		'isnoko50' => false,
 		'antibot' => $antibot,
 		'boardlist' => createBoardlist($mod),
-		'return' => ($mod ? '?' . $board['url'] . $config['file_index'] : $config['root'] . $board['dir'] . $config['file_index'])
+		'return' => ($mod ? '?' . $board['url'] : $config['root'] . $board['dir'])
 	));
 
 	// json api

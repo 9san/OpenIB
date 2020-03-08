@@ -461,6 +461,23 @@ class ImagePNG extends ImageBase {
 	}
 }
 
+class ImageWEBP extends ImageBase {
+	public function from() {
+		$this->image = @imagecreatefromwebp($this->src);
+	}
+	public function to($src) {
+		global $config;
+		imagewebp($this->image, $src);
+	}
+	public function resize() {
+		$this->GD_create();
+		imagecolortransparent($this->image, imagecolorallocatealpha($this->image, 0, 0, 0, 0));
+		imagesavealpha($this->image, true);
+		imagealphablending($this->image, false);
+		$this->GD_copyresampled();
+	}
+}
+
 class ImageGIF extends ImageBase {
 	public function from() {
 		$this->image = @imagecreatefromgif($this->src);

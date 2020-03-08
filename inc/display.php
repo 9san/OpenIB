@@ -14,9 +14,13 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == str_replace('\\', '/', __FILE__)) {
 	http://www.php.net/manual/en/function.filesize.php#100097
 */
 function format_bytes($size) {
-	$units = array(' B', ' KB', ' MB', ' GB', ' TB');
-	for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024;
-	return round($size, 2).$units[$i];
+    $units = array(' B', ' KB', ' MB', ' GB', ' TB');
+    for ($i = 0; $size >= 1000 && $i < 4; $i++) //KiB, not KB, but we'll pretend it's the same.
+        $size /= 1000;   
+    if($units[$i] == ' B' || $units[$i] == ' KB') //rounds up (0) B&KB, 1 digit for MB and up. This should be easy to change if you wish.
+        return round($size, 0).$units[$i];
+    else
+        return round($size, 1).$units[$i];
 }
 
 function doBoardListPart($list, $root, &$boards) {
@@ -195,12 +199,21 @@ function truncate($body, $url, $max_lines = false, $max_chars = false) {
 	
 	$original_body = $body;
 	
-	$lines = substr_count($body, '<br/>');
-	
-	// Limit line count
-	if ($lines > $max_lines) {
-		if (preg_match('/(((.*?)<br\/>){' . $max_lines . '})/', $body, $m))
-			$body = $m[0];
+	if (($config['markup_paragraphs'] === true) && ($config['markup_paragraphs_span'] === false)) {
+		$lines = substr_count($body, '</p>');
+		// Limit line count
+		if ($lines > $max_lines) {
+			if (preg_match('/(((.*?)(<\/p>)){' . $max_lines . '})/', $body, $m))
+				$body = $m[0];
+		}
+	}
+	else {
+		$lines = substr_count($body, '<br/>');
+		// Limit line count
+		if ($lines > $max_lines) {
+			if (preg_match('/(((.*?)(<br\/>)){' . $max_lines . '})/', $body, $m))
+				$body = $m[0];
+		}
 	}
 	
 	$body = mb_substr($body, 0, $max_chars);

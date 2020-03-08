@@ -26,3 +26,7 @@ function filename_func($a) {
   $f = str_replace(array("\0", "\n", "<", ">", "/", "&"), array("?", "?", "«", "»", "⁄", "and"), $f);
   return $f;
 }
+
+function current_time($x) {
+	return date($x);
+}

@@ -30,7 +30,11 @@
 
 			$update = prepare('UPDATE ``boards`` SET sfw = :sfw WHERE uri = :uri');
 			$update->bindValue(':uri', $b);
-			$update->bindValue(':sfw', isset($_POST['sfw']));
+			if ($config['forced_sfw'] != true) {
+				$update->bindValue(':sfw', isset($_POST['sfw']));
+			} else {
+				$update->bindValue(':sfw', true);
+			}
 			$update->execute();
 		}
 		$query = prepare('SELECT * FROM ``board_tags`` WHERE uri = :uri');
@@ -323,6 +327,18 @@ FLAGS;
 			symlink(getcwd() . '/' . $config['no_file_image'], "$dir/no-file.png");
 		}
 		
+		// "Reset assets"
+		if (isset($_POST['reset_assets'])){
+			//delete old files
+				unlink($dir . '/deleted.png');
+				unlink($dir . '/spoiler.png');
+				unlink($dir . '/no-file.png');
+			//create new symlinks
+				symlink(getcwd() . '/' . $config['image_deleted'], "$dir/deleted.png");
+				symlink(getcwd() . '/' . $config['spoiler_image'], "$dir/spoiler.png");
+				symlink(getcwd() . '/' . $config['no_file_image'], "$dir/no-file.png");
+		}
+		
 		// "File deleted"
 		if (isset($_FILES['deleted_file']) && !empty($_FILES['deleted_file']['tmp_name'])){
 			$upload = $_FILES['deleted_file']['tmp_name'];
@@ -420,7 +436,7 @@ FLAGS;
 	function mod_8_banners($b) {
 		global $config, $mod, $board;
 
-		error('Banner editing is currently disabled. Please check back later!');
+		//error('Banner editing is currently disabled. Please check back later!');
 
 		require_once 'inc/image.php';
 
@@ -462,7 +478,7 @@ FLAGS;
 			if ($size[0] != 300 or $size[1] != 100){
 				error('Image wrong size!');
 			}
-			if (sizeof($banners) >= 50) {
+			if (sizeof($banners) >= 20) {
 				error('Too many banners.');
 			}
 
@@ -538,6 +554,7 @@ FLAGS;
 			$oekaki = ($imgboard || $fileboard) && isset($_POST['oekaki']) ? 'true' : 'false';
 			$view_bumplock = isset($_POST['view_bumplock']) ? '-1' : 'MOD';
 			$enable_emoji = isset($_POST['enable_emoji']) ? 'true' : 'false';
+			$url_banner_global = isset($_POST['url_banner_global']) ? 'true' : 'false';
 
 			if (($tor_image_posting === 'true') && isset($_POST['meta_noindex'])) {
 				error('Please index your board to enable this.');
@@ -622,6 +639,7 @@ FLAGS;
 			$anal_filenames = ($fileboard) && isset($_POST['anal_filenames']) ? "\$config['filename_func'] = 'filename_func';\n" : '';
 
 			$anonymous = base64_encode($_POST['anonymous']);
+			$sage = base64_encode(htmlentities($_POST['sage']));
 			$blotter = base64_encode(purify_html(html_entity_decode($_POST['blotter'])));
 			$add_to_config = @file_get_contents($b.'/extra_config.php');
 			$replace = '';
@@ -698,10 +716,18 @@ FLAGS;
 				$min_body = 0;
 			}
 
-			if (!(strlen($title) < 40))
-				error('Invalid title');
-			if (!(strlen($subtitle) < 200))
-				error('Invalid subtitle');
+			if (strlen($title) > 40)
+				error('Invalid title, exceeded 40.');
+			if (strlen($subtitle) > 200)
+				error('Invalid subtitle, exceeded 200.');
+			if (strlen(base64_decode($anonymous)) > 35)
+				error('Invalid default name, exceeded 35.');
+			if (strlen(base64_decode($sage)) > 35)
+				error('Invalid sage text, exceeded 35.');
+			if (strlen($blotter) > 2000)
+				error('Invalid announcement, exceeded 2000.');
+			if (strlen($_POST['css']) > 65000)
+				error('Invalid stylesheet, exceeded 65000.');
 
 			$query = prepare('UPDATE ``boards`` SET `title` = :title, `subtitle` = :subtitle, `indexed` = :indexed, `public_bans` = :public_bans, `public_logs` = :public_logs, `8archive` = :8archive WHERE `uri` = :uri');
 			$query->bindValue(':title', $title);
@@ -731,6 +757,7 @@ FLAGS;
 \$config['early_404'] = $early_404;
 \$config['allow_delete'] = $allow_delete;
 \$config['anonymous'] = base64_decode('$anonymous');
+\$config['sage'] = base64_decode('$sage');
 \$config['blotter'] = base64_decode('$blotter');
 \$config['stylesheets']['Custom'] = 'board/$b.css';
 \$config['default_stylesheet'] = array('Custom', \$config['stylesheets']['Custom']);
@@ -749,6 +776,7 @@ FLAGS;
 \$config['min_body'] = $min_body;
 \$config['mod']['view_bumplock'] = $view_bumplock;
 \$config['enable_emoji'] = $enable_emoji;
+\$config['url_banner_global'] = $url_banner_global;
 $code_tags $katex $replace $multiimage $emoji_config $allow_flash $allow_pdf $user_flags 
 $assets
 $locale

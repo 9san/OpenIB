@@ -103,7 +103,7 @@
 	 * http://tinyboard.org/docs/index.php?p=Config/Cache
 	 */
 
-	$config['cache']['enabled'] = false;
+	$config['cache']['enabled'] = 'apc';
 	// $config['cache']['enabled'] = 'xcache';
 	// $config['cache']['enabled'] = 'apc';
 	// $config['cache']['enabled'] = 'memcached';
@@ -175,12 +175,12 @@
 	 * Read more: http://tinyboard.org/docs/?p=Config/DNSBL
 	 */
 
-	// Prevents most Tor exit nodes from making posts. Recommended, as a lot of abuse comes from Tor because
-	// of the strong anonymity associated with it.
-	$config['dnsbl'][] = array('exitnodes.tor.dnsbl.sectoor.de', 1);
 
 	// http://www.sorbs.net/using.shtml
-	// $config['dnsbl'][] = array('dnsbl.sorbs.net', array(2, 3, 4, 5, 6, 7, 8, 9));
+	//$config['dnsbl'][] = array('dnsbl.sorbs.net', array(2, 3, 4, 5, 6, 7, 8, 9));
+
+	//most old blacklists are dead, use this one.
+	$config['dnsbl'][] = array('rbl.efnet.org', 4);
 
 	// http://www.projecthoneypot.org/httpbl.php
 	// $config['dnsbl'][] = array('<your access key>.%.dnsbl.httpbl.org', function($ip) {
@@ -225,7 +225,7 @@
 	$config['spam']['hidden_inputs_max'] = 12;
 
 	// How many times can a "hash" be used to post?
-	$config['spam']['hidden_inputs_max_pass'] = 12;
+	$config['spam']['hidden_inputs_max_pass'] = 128;
 
 	// How soon after regeneration do hashes expire (in seconds)?
 	$config['spam']['hidden_inputs_expire'] = 60 * 60 * 3; // three hours
@@ -282,10 +282,10 @@
 	// Custom CAPTCHA provider general settings
 
 	// Captcha expiration:
-	$config['captcha']['expires_in'] = 120; // 120 seconds
+	$config['captcha']['expires_in'] = 240; // 120 seconds
 
 	// Captcha length:
-	$config['captcha']['length'] = 6;
+	$config['captcha']['length'] = 5;
 
 	/* 
 	 * Custom captcha provider path (You will need to change these depending on your configuration! It cannot be
@@ -293,12 +293,12 @@
 	 * 
 	 * Specify yourimageboard.com/$config['root']/8chan-captcha/entrypoint.php for the default provider or write your own
 	 */
-	$config['captcha']['provider_get']   = 'http://localhost/8chan-captcha/entrypoint.php';
-	$config['captcha']['provider_check'] = 'http://localhost/8chan-captcha/entrypoint.php';
+	$config['captcha']['provider_get']   = 'https://9san.ch/8chan-captcha/entrypoint.php';
+	$config['captcha']['provider_check'] = 'https://9san.ch/8chan-captcha/entrypoint.php';
 
 	// Custom captcha extra field (eg. charset)
-	$config['captcha']['extra'] = 'abcdefghijklmnopqrstuvwxyz';
-
+	//$config['captcha']['extra'] = 'abcdefghijklmnopqrstuvwxyz';
+	$config['captcha']['extra'] = '0123456789';
 
 	/*
 	 * Custom filters detect certain posts and reject/ban accordingly. They are made up of a condition and an
@@ -317,11 +317,11 @@
 	 */
 
 	// Minimum time between between each post by the same IP address.
-	$config['flood_time'] = 10;
+	$config['flood_time'] = 5;
 	// Minimum time between between each post with the exact same content AND same IP address.
-	$config['flood_time_ip'] = 120;
+	$config['flood_time_ip'] = 30;
 	// Same as above but by a different IP address. (Same content, not necessarily same IP address.)
-	$config['flood_time_same'] = 30;
+	$config['flood_time_same'] = 2;
 
 	// Minimum time between posts by the same IP address (all boards).
 	$config['filters'][] = array(
@@ -451,19 +451,19 @@
 	// Require a subject for threads?
 	$config['force_subject_op'] = false;
 
-	// Strip superfluous new lines at the end of a post.
+	// Strip superfluous new lines at the start and end of a post.
 	$config['strip_superfluous_returns'] = true;
 	// Strip combining characters from Unicode strings (eg. "Zalgo").
 	$config['strip_combining_chars'] = true;
 
 	// Maximum post body length.
-	$config['max_body'] = 1800;
+	$config['max_body'] = 5000;
 	// Maximum number of newlines. (0 for unlimited)
-	$config['max_newlines'] = 0;
+	$config['max_newlines'] = 25;
 	// Maximum number of post body lines to show on the index page.
-	$config['body_truncate'] = 15;
+	$config['body_truncate'] = 12;
 	// Maximum number of characters to show on the index page.
-	$config['body_truncate_char'] = 2500;
+	$config['body_truncate_char'] = 2000;
 
 	// Typically spambots try to post many links. Refuse a post with X links?
 	$config['max_links'] = 20;
@@ -479,14 +479,14 @@
 	// Maximum filename length (will be truncated).
 	$config['max_filename_len'] = 255;
 	// Maximum filename length to display (the rest can be viewed upon mouseover).
-	$config['max_filename_display'] = 30;
+	$config['max_filename_display'] = 20;
 
 	// Allow users to delete their own posts?
 	$config['allow_delete'] = true;
 	// How long after posting should you have to wait before being able to delete that post? (In seconds.)
 	$config['delete_time'] = 10;
 	// Reply limit (stops bumping thread when this is reached).
-	$config['reply_limit'] = 250;
+	$config['reply_limit'] = 750;
 
 	// Image hard limit (stops allowing new image replies when this is reached if not zero).
 	$config['image_hard_limit'] = 0;
@@ -512,7 +512,7 @@
 	$config['markup_urls'] = true;
 
 	// Optional URL prefix for links (eg. "http://anonym.to/?").
-	$config['link_prefix'] = ''; 
+	$config['link_prefix'] = '/derefer.php?'; 
 	$config['url_ads'] = &$config['link_prefix'];	 // leave alias
 	
 	// Allow "uploading" images via URL as well. Users can enter the URL of the image and then Tinyboard will
@@ -526,6 +526,7 @@
 
 	// For a normal string replacement:
 	// $config['wordfilters'][] = array('cat', 'dog');	
+
 	// Advanced raplcement (regular expressions):
 	// $config['wordfilters'][] = array('/ca[rt]/', 'dog', true); // 'true' means it's a regular expression
 
@@ -552,18 +553,22 @@
 	// When true, there will be no subject field.
 	$config['field_disable_subject'] = false;
 	// When true, there will be no subject field for replies.
-	$config['field_disable_reply_subject'] = &$config['field_disable_name'];
+	$config['field_disable_reply_subject'] = true;
 	// When true, a blank password will be used for files (not usable for deletion).
 	$config['field_disable_password'] = false;
 
-	// When true, users are instead presented a selectbox for email. Contains, blank, noko and sage.
+	// When true, users are instead presented a selectbox for email. Contains, blank, noko, sage, and spoiler.
 	$config['field_email_selectbox'] = &$config['field_disable_name'];
+	//$config['field_email_selectbox'] = true;
 
 	// Prevent users from uploading files.
 	$config['disable_images'] = false;
 
 	// When true, the sage won't be displayed
-	$config['hide_sage'] = false;
+	$config['hide_sage'] = true;
+	
+	//When true, the email won't be displayed
+	$config['hide_email'] = true;
 
 	// Attach country flags to posts.
 	$config['country_flags'] = false;
@@ -669,8 +674,15 @@
 	$config['markup'][] = array("/'''(.+?)'''/", "<strong>\$1</strong>");
 	$config['markup'][] = array("/''(.+?)''/", "<em>\$1</em>");
 	$config['markup'][] = array("/\*\*(.+?)\*\*/", "<span class=\"spoiler\">\$1</span>");
-	$config['markup'][] = array("/\(\(\((.+?)\)\)\)/", "<span class=\"detected\">(((\$1)))</span>");
+	$config['markup'][] = array("/\[spoiler\](.+?)\[\/spoiler\]/", "<span class=\"spoiler\">\$1</span>");
+	//$config['markup'][] = array("/\(\(\((.+?)\)\)\)/", "<span class=\"detected\">(((\$1)))</span>"); //by turning this on you acknowledge you are a fuckhead
 	$config['markup'][] = array("/^[ |\t]*==(.+?)==[ |\t]*$/m", "<span class=\"heading\">\$1</span>");
+
+	$config['markup'][] = array("/~~(.+?)~~/", "<s>\$1</s>");
+	$config['markup'][] = array("/__(.+?)__/", "<u>\$1</u>");
+	$config['markup'][] = array("/###([^\s']+)###/", "<a class='cite' href='/" . $board['uri'] . "/\$1'>###\$1###</a>"); //board page
+	$config['markup'][] = array("/####([^\s']+)####/", "<a class='cite' href='/$1'>####\$1####</a>"); //global page
+
 
 	// Highlight PHP code wrapped in <code> tags (PHP 5.3+)
 	// $config['markup'][] = array(
@@ -708,15 +720,15 @@
 	$config['multiimage_method'] = 'split';
 
 	// For resizing, maximum thumbnail dimensions.
-	$config['thumb_width'] = 255;
-	$config['thumb_height'] = 255;
+	$config['thumb_width'] = 128;
+	$config['thumb_height'] = 128;
 	// Maximum thumbnail dimensions for thread (OP) images.
 	$config['thumb_op_width'] = 255;
 	$config['thumb_op_height'] = 255;
 
 	// Thumbnail extension ("png" recommended). Leave this empty if you want the extension to be inherited
 	// from the uploaded file.
-	$config['thumb_ext'] = 'png';
+	$config['thumb_ext'] = 'webp';
 
 	// Maximum amount of animated GIF frames to resize (more frames can mean more processing power). A value
 	// of "1" means thumbnails will not be animated. Requires $config['thumb_ext'] to be 'gif' (or blank) and
@@ -786,6 +798,7 @@
 	$config['allowed_ext'][] = 'jpeg';
 	$config['allowed_ext'][] = 'gif';
 	$config['allowed_ext'][] = 'png';
+	$config['allowed_ext'][] = 'webp';
 	// $config['allowed_ext'][] = 'svg';
 
 	// Allowed extensions for OP. Inherits from the above setting if set to false. Otherwise, it overrides both allowed_ext and
@@ -796,7 +809,9 @@
 	// Allowed additional file extensions (not images; downloadable files).
 	// $config['allowed_ext_files'][] = 'txt';
 	// $config['allowed_ext_files'][] = 'zip';
-
+	$config['allowed_ext_files'][] = 'webm';
+	$config['allowed_ext_files'][] = 'mp4';
+	
 	// An alternative function for generating image filenames, instead of the default UNIX timestamp.
 	// $config['filename_func'] = function($post) {
 	//	  return sprintf("%s", time() . substr(microtime(), 2, 3));
@@ -813,7 +828,7 @@
 	// Location of above images.
 	$config['file_thumb'] = 'static/%s';
 	// Location of thumbnail to use for spoiler images.
-	$config['spoiler_image'] = 'static/spoiler.png';
+	$config['spoiler_image'] = 'static/spoiler/spoiler3.png';
 	// Location of thumbnail to use for deleted images.
 	$config['image_deleted'] = 'static/deleted.png';
 	// Location of placeholder image for fileless posts in catalog.
@@ -824,7 +839,7 @@
 	$config['minimum_copy_resize'] = false;
 
 	// Maximum image upload size in bytes.
-	$config['max_filesize'] = 10 * 1024 * 1024; // 10MB
+	$config['max_filesize'] = 10 * 1000 * 1000; // 10MiB
 	// Maximum image dimensions.
 	$config['max_width'] = 10000;
 	$config['max_height'] = $config['max_width'];
@@ -840,9 +855,9 @@
 	$config['show_filename'] = true;
 
 	// WebM Settings
-	$config['webm']['use_ffmpeg'] = false;
-	$config['webm']['allow_audio'] = false;
-	$config['webm']['max_length'] = 120;
+	$config['webm']['use_ffmpeg'] = true;
+	$config['webm']['allow_audio'] = true;
+	$config['webm']['max_length'] = 60 * 120;
 	$config['webm']['ffmpeg_path'] = 'ffmpeg';
 	$config['webm']['ffprobe_path'] = 'ffprobe';
 
@@ -870,7 +885,7 @@
  */
 
 	// Maximum amount of threads to display per page.
-	$config['threads_per_page'] = 10;
+	$config['threads_per_page'] = 9;
 	// Maximum number of pages. Content past the last page is automatically purged.
 	$config['max_pages'] = 10;
 	// Replies to show per thread on the board index page.
@@ -902,16 +917,20 @@
 	$config['locale'] = 'en'; // (en, ru_RU.UTF-8, fi_FI.UTF-8, pl_PL.UTF-8)
 
 	// Timezone to use for displaying dates/tiems.
-	$config['timezone'] = 'America/Los_Angeles';
+	$config['timezone'] = 'Europe/Amsterdam';
+	//$config['timezone'] = 'America/Los_Angeles';
 	// The format string passed to strftime() for displaying dates.
 	// http://www.php.net/manual/en/function.strftime.php
-	$config['post_date'] = '%m/%d/%y (%a) %H:%M:%S';
+	
+	//$config['post_date'] = '%d/%m/%y (%a) %H:%M:%S'; //eu format
+	$config['post_date'] = '%m/%d/%y (%a) %H:%M:%S'; //us format
+	
 	// Same as above, but used for "you are banned' pages.
 	$config['ban_date'] = '%A %e %B, %Y';
 
 	// The names on the post buttons. (On most imageboards, these are both just "Post").
-	$config['button_newtopic'] = _('New Topic');
-	$config['button_reply'] = _('New Reply');
+	$config['button_newtopic'] = _('Submit');
+	$config['button_reply'] = _('Reply');
 
 	// Assign each poster in a thread a unique ID, shown by "ID: xxxxx" before the post number.
 	$config['poster_ids'] = false;
@@ -932,16 +951,18 @@
 	$config['genpassword_chars'] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
 
 	// Optional banner image at the top of every page.
-	// $config['url_banner'] = '/banner.php';
+	//$config['url_banner'] = 'static/banner';
 	// Banner dimensions are also optional. As the banner loads after the rest of the page, everything may be
 	// shifted down a few pixels when it does. Making the banner a fixed size will prevent this.
-	// $config['banner_width'] = 300;
-	// $config['banner_height'] = 100;
+	$config['banner_width'] = 300;
+	$config['banner_height'] = 100;
 
 	// Custom stylesheets available for the user to choose. See the "stylesheets/" folder for a list of
 	// available stylesheets (or create your own).
-	$config['stylesheets']['Yotsuba B'] = ''; // Default; there is no additional/custom stylesheet for this.
+	$config['stylesheets']['Yotsuba Blue'] = ''; // Default; there is no additional/custom stylesheet for this.
+	$config['stylesheets']['Yotsuba Green'] = 'yotsubag.css'; // Default; there is no additional/custom stylesheet for this.
 	$config['stylesheets']['Yotsuba']   = 'yotsuba.css';
+	
 	// $config['stylesheets']['Futaba']    = 'futaba.css';
 	// $config['stylesheets']['Dark']      = 'dark.css';
 	$config['stylesheets']['Tomorrow']  = 'tomorrow.css';
@@ -950,7 +971,7 @@
 	// $config['uri_stylesheets'] = 'http://static.example.org/stylesheets/';
 
 	// The default stylesheet to use.
-	$config['default_stylesheet'] = array('Yotsuba B', $config['stylesheets']['Yotsuba B']);
+	$config['default_stylesheet'] = array('Yotsuba Blue', $config['stylesheets']['Yotsuba Blue']);
 
 	// Make stylesheet selections board-specific.
 	$config['stylesheets_board'] = false;
@@ -985,7 +1006,7 @@
 	$config['page_nav_top'] = false;
 
 	// Show "Catalog" link in page navigation. Use with the Catalog theme.
-	$config['catalog_link'] = 'catalog.html';
+	$config['catalog_link'] = 'catalog';
 
 	// Board categories. Only used in the "Categories" theme.
 	// $config['categories'] = array(
@@ -1053,7 +1074,7 @@
 	$config['additional_javascript_compile'] = false;
 
 	// Minify Javascript using http://code.google.com/p/minify/.
-	$config['minify_js'] = false;
+	$config['minify_js'] = true;
 
 /*
  * ====================
@@ -1065,15 +1086,14 @@
 	$config['enable_embedding'] = false;
 
 	// Youtube.js embed HTML code
-	$config['youtube_js_html'] = '<div class="video-container" data-video="$1" data-params="&$2&$3">'.
-		'<span class="unimportant yt-help">YouTube embed. Click thumbnail to play.</span><br>'.
-		'<a href="$0" target="_blank" class="file">'.
-		'<img style="width:255px" src="//img.youtube.com/vi/$1/0.jpg" class="post-image"/>'.
+	$config['youtube_js_html'] = '<div class="files"></div><div class="video-container" data-video="$1" data-params="&$2&$3">'.
+		'<a href="$0" target="_blank" class="file" style="float:left">'.
+		'<img src="/static/video.png" class="desktop-play" alt=""/><img src="/static/video.png" class="mobile-play" alt=""/>'.
+		'<img style="width:255px;height:164px;object-fit:cover" src="//img.youtube.com/vi/$1/0.jpg" class="post-image" id="yt" alt=""/>'.
 		'</a></div>';
 
          //Vlive
-        $config['vlive_js_html'] = '<div class="video-container-vlive" data-video="$1" data-params="">'.
-          '<span class="unimportant yt-help">V Live embed. Click on thumbnail to play.</span><br>'.
+        $config['vlive_js_html'] = '<p class="fileinfo">vLive: <a href="$0" target="_blank">$1</a><div class="video-container-vlive" data-video="$1" data-params="">'.
           '<a href="$0" target="_blank" class="file">'.
           '<img src="/static/vlive.jpg" id="$1" data-params="$0" class="post-image vlive_thumb"/>'.
           '</a></div>';
@@ -1196,8 +1216,8 @@
 
 	// Location of files.
 	$config['file_index'] = 'index.html';
-	$config['file_page'] = '%d.html';
-	$config['file_page50'] = '%d+50.html';
+	$config['file_page'] = '%d';
+	$config['file_page50'] = '%d+50';
 	$config['file_mod'] = 'mod.php';
 	$config['file_post'] = 'post.php';
 	$config['file_script'] = 'main.js';
@@ -1207,7 +1227,7 @@
 	// Misc directories.
 	$config['dir']['img'] = 'src/';
 	$config['dir']['thumb'] = 'thumb/';
-	$config['dir']['res'] = 'res/';
+	$config['dir']['res'] = 'thread/';
 
 	// Images in a seperate directory - For CDN or media servers
 	// This is a particularly advanced feature - contact ctrlcctrlv or rails unless you
@@ -1745,7 +1765,7 @@
 	$config['link_regex'] = '((?:(?:https?:)?\/\/|ftp:\/\/|irc:\/\/)[^\s<>()"]+?(?:\([^\s<>()"]*?\)[^\s<>()"]*?)*)((?:\s|<|>|"|\.|\]|!|\?|,|&\#44;|&quot;)*(?:[\s<>()"]|$))';
 
 	// Allowed URLs in ?/settings
-	$config['allowed_offsite_urls'] = array('https://i.imgur.com/', 'https://media.8ch.net/', 'https://fonts.googleapis.com/', 'https://fonts.gstatic.com/');
+	$config['allowed_offsite_urls'] = array('https://i.imgur.com/', 'https://fonts.googleapis.com/', 'https://fonts.gstatic.com/', 'https://9san.ch/');
 
 	// Use read.php?
 	// read.php is a file that dynamically displays pages to users instead of the build on demand system in use in Tinyboard since 2010.
@@ -1761,7 +1781,7 @@
 	$config['twig_cache'] = false;
 
 	// Use CAPTCHA for reports?
-	$config['report_captcha'] = false;
+	$config['report_captcha'] = true;
 
 	// Allowed HTML tags in ?/edit_pages.
 	$config['allowed_html'] = 'a[href|title],p,br,li,ol,ul,strong,em,u,h2,b,i,tt,div,img[src|alt|title],hr,h1,h2,h3,h4,h5';
@@ -1781,3 +1801,29 @@
 	$config['version'] = '+ <a href="https://github.com/ctrlcctrlv/infinity">infinity</a> + <a href="https://github.com/OpenIB/OpenIB/">OpenIB</a>';
 
 	$config['hashSalt'] = "salt";
+	
+	// Board languages
+	$config['languages'] = array(
+		'ch' => "汉语",
+		'cz' => "Čeština",
+		'dk' => "Dansk",
+		'de' => "Deutsch",
+		'eo' => "Esperanto",
+		'en' => "English",
+		'es' => "Español",
+		'fi' => "Suomi",
+		'fr' => "Français",
+		'hu' => "Magyar",
+		'it' => "Italiano",
+		'ja' => "日本語",
+		'jbo' => "Lojban",
+		'lt' => "Lietuvių Kalba",
+		'lv' => "Latviešu Valoda",
+		'no' => "Norsk",
+		'nl' => "Nederlands Vlaams",
+		'pl' => "Polski",
+		'pt' => "Português",
+		'ru' => "Русский",
+		'sk' => "Slovenský Jazyk",
+		'tw' => "Taiwanese",
+	);
