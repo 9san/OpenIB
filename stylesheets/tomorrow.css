@@ -5,19 +5,28 @@ https://github.com/7185/8chan-tomorrow/
 
 **/
 body {
-  background:#1d1f21 none;
+  background:#1d1f21 none!important;
   color:#C5C8C6
 }
 h1,div.subtitle {
   color:#C5C8C6!important
 }
-a:link,a:visited,p.intro a.email span.name {
+a:link,a:visited,p.intro a.email span.name, #catalog_search_button, .embedbutton a, .fakelink {
   color:#81a2be
+}
+footer a, footer a:visited {
+	color: #81a2be;
 }
 a.download_image {
     color: #81a2be;
 }
-a:link:hover {
+#blotter.full .blotter-date, #blotter.full .blotter-message {
+    background: #282a2e;
+}
+#blotter.full tr:nth-of-type(2n) {
+    background: #1d1f21!important;
+}
+a:link:hover, #catalog_search_button:hover, footer a:hover, .embedbutton a:hover, .fakelink:hover {
   color:#5F89AC
 }
 a.post_no {
@@ -26,6 +35,9 @@ a.post_no {
 a.post_no:hover {
   color:#5F89AC!important
 }
+img.banner, img.board_image {
+	border: 1px solid #000;
+}
 div.banner {
   background-color:#1d1f21
 }
@@ -33,7 +45,7 @@ div.post.reply {
   background-color:#282a2e;
   border:1px solid #282a2e;
   margin-bottom:2px;
-  margin-left:16px;
+  /*margin-left:16px;*/
   margin-top:2px
 }
 div.post.reply.highlighted {
@@ -53,6 +65,9 @@ div.post-hover {
 .theme-catalog div.thread:hover {
   background-color:#1d1f21;
   border-color:#111
+}
+.button-fp {
+  background:#282a2e!important;
 }
 p.intro span.subject {
   color:#b294bb
@@ -75,7 +90,7 @@ form table tr th {
   color:#C5C8C6
 }
 div.ban h2 {
-  background:#282A2E;
+  background:#1d1f21;;
   color:inherit
 }
 div.ban {
@@ -93,9 +108,11 @@ div.pages a.selected {
   color:#81a2be;
   font-weight:700
 }
-div.boardlist {
+.desktop-style div.boardlist:not(.bottom) {
   background-color:#282a2e!important;
-  color:#C5C8C6
+}
+div.boardlist {
+	color:#C5C8C6
 }
 div.boardlist:nth-of-type(1) {
   border-bottom:1px solid #111!important;
@@ -127,9 +144,6 @@ div.blotter {
 span.omitted {
   color:#707070
 }
-p.intro a,span.omitted a {
-  text-decoration:none
-}
 form#quick-reply {
   padding-right:1px;
   border: 1px solid #111
@@ -151,15 +165,22 @@ div#watchlist a:hover,a.watchThread:hover {
   color:#5F89AC
 }
 
-/* Remove the following parts if those annoy you */
-/* Keep small thumbnails in replies */
-.post.reply a:not([data-expanded="true"]) .post-image{
-  width:auto!important;
-  height:auto!important;
-  max-height:160px;
-  max-width:160px
+.dropzone {
+	background-color: #282a2e;
+}
+.dropzone .file-hint {
+	color: #C5C8C6;
+	border: 2px dashed #C5C8C6;
+}
+.file-hint:hover, .dropzone.dragover .file-hint {
+	color: rgba(125, 125, 125, 0.8);
+	border-color: rgba(125, 125, 125, 0.8);
+}
+.dropzone.dragover {
+	background-color: rgba(200, 200, 200, 1);
 }
 
+/* Remove the following parts if those annoy you */
 .modlog tr:nth-child(even), .modlog th {
 	background-color: #282A2E;
 }
@@ -204,7 +225,9 @@ table.board-list-table tr:nth-of-type( even ) .board-tags .board-cell {
 ul.box-content{
   background-color: #1d1f21;
 }
-
+.frontpage header {
+  background-color: #282a2e !important;
+}
 li.col-12{
   background-color: #282a2e ;
 }
@@ -213,6 +236,7 @@ li.col-12:nth-child(odd) { background: #1d1f21!important; }
 
 ul.box-content {
   margin: 0px 0!important;
+  padding: 8px 8px 0px 8px;
 }
 
 a.hash_unix, a.hash_unix:visited, a.download_file_8ch, a.download_file_8ch:visited{
@@ -227,4 +251,71 @@ a.hash_unix, a.hash_unix:visited, a.download_file_8ch, a.download_file_8ch:visit
 div.ban {
  background: #282a2e !important;
  border-color: #111;
+}
+
+pre.prettyprint {
+	background: #ffffff0a!important;
+}
+
+input[type="text"]:focus, textarea:focus, .captcha_html:active {
+	border-color: #000!important;
+}
+.hide-thread-linkz#show {
+	background: url('/static/buttons.png') -36px -36px;
+}
+.hide-thread-linkz#hide {
+	background: url('/static/buttons.png') -18px -36px;	
+}
+#quick-reply th .close-btn {
+	background: url('/static/buttons.png') 0 -36px!important;
+}
+#quick-reply {
+    border-top: 1px solid transparent;
+}
+#quick-reply tr#upload {
+    border-bottom: 1px solid #ccc;
+}
+#quick-reply table, #quick-reply th {
+    border-color: #ccc!important;
+}
+.expandbutton#plus {
+	background: url('/static/buttons.png') -36px -36px;
+}
+.expandbutton#minus {
+	background: url('/static/buttons.png') -18px -36px;	
+}
+.post-menu li {
+	background-color: #282a2e!important;
+}
+.post-menu li:hover {
+    background-color: #1d1d21 !important;
+}
+/* retina */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) {  
+	.hide-thread-linkz#hide {
+		background: url('/static/buttons@2x.png') 36px 18px!important;
+		background-size: 54px!important;
+	}
+	.hide-thread-linkz#show {
+		background: url('/static/buttons@2x.png') 18px 18px!important;
+		background-size: 54px!important;
+	}
+	#quick-reply th .close-btn {
+		background: url('/static/buttons@2x.png') 0px 18px!important;
+		background-size: 54px!important;
+	}
+	.expandbutton#plus {
+		background: url('/static/buttons@2x.png') 18px 18px!important;
+		background-size: 54px!important;
+	}
+	.expandbutton#minus {
+		background: url('/static/buttons@2x.png') 36px 18px!important;
+		background-size: 54px!important;
+	}
 }

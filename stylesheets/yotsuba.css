@@ -1,14 +1,20 @@
 body {
-	background: #ffe url('img/fade-yotsuba.png') repeat-x 50% 0%;
+	background: #ffe url('img/fade-yotsuba.png') repeat-x 50% 0%!important;
 	color: #800000;
 }
 .quote {
-    color:#789922
+	color:#789922
 }
 .quote_checked{
- color: #148800;
+	color: #148800;
 }
-a:link, a:visited, .intro span.name {
+div.post div.body a, .fakelink, a.cite {
+	color: navy;
+}
+a:link, a:visited, .intro span.name, #catalog_search_button, .embedbutton a {
+	color: #800;
+}
+footer a, footer a:visited {
 	color: #800;
 }
 a.email { 
@@ -16,6 +22,12 @@ a.email {
 }
 a:link:hover {
 	color: #e00;
+}
+a:hover, a:visited:hover, .intro a.post_no:hover, #catalog_search_button:hover, footer a:hover, .fakelink:hover, a.cite:hover, .fakelink:hover, div.post div.body a:hover {
+	color: #e00;
+}
+img.banner, img.board_image {
+	border: 1px solid #9f322f;
 }
 a.post_no {
 	color: #800000;
@@ -28,9 +40,6 @@ div.post.reply.highlighted {
 	background: #f0c0b0;
 	border-color: #d9bfb7;
 }
-div.post.reply div.body a {
-	color: navy;
-}
 .intro span.subject {
 	color: #d00;
 }
@@ -39,7 +48,7 @@ form table tr th {
 }
 div.ban h2 {
 	background: #FCA;
-	color: inherit;
+	color: #800;
 }
 div.ban {
 	border-color: #800;
@@ -50,6 +59,7 @@ div.ban p {
 div.pages {
 	background: #F0E0D6;
 	border-color: #D9BFB7;
+	color: #B59388;
 }
 div.pages a.selected {
 	color: #800;
@@ -65,6 +75,19 @@ div.boardlist a {
 }
 table.modlog tr th {
 	background: #EA8;
+}
+
+/* frontpage */
+.frontpage header {
+	background-color: #FFF!important;
+	color: #000!important;
+}
+.button-fp {
+	background: #fee4c5!important;
+}
+.col.col-12.footer.top h2 {
+	background: #800;
+	color: #fff;
 }
 
 /* options.js */
@@ -123,25 +146,97 @@ table.board-list-table tr:nth-of-type( even ) .board-tags .board-cell {
 
 /*new design*/
 .description {
-  background: rgb(255, 255, 238) none repeat scroll 0% 0% !important;
+	background: #fff!important;
 }
-
+span.alert {
+	color: #000;
+}
 #velocious_main li:nth-child(odd) { background:#ede2d4 !important; }
-
 #recent_main li:nth-child(odd) { background:#ede2d4 !important; }
-
 #tempestuous_main li:nth-child(odd) { background:#ede2d4 !important; }
-
 #activeboards_main li:nth-child(odd) { background:#ede2d4 !important; }
 
 .board-list #search-form{
- background: #ffffee!important;
+	background: #fff !important;
 }
 
 /*28/09/2017*/
 div.ban {
-background: rgb(255, 255, 238) none repeat scroll 0% 0% !important;
-color:#800 !important;
+	background: #fff !important;
+	color:#000;
+}
+.blotter-message a {
+	color: navy;
+}
+.theme-catalog div.thread:hover {
+	background: #f0e0d6;
+	border-color: #d9bfb7;
 }
 
-#boardlist li:nth-child(odd) { background:#ede2d4 !important; }
+.hide-thread-linkz#hide {
+	background: url('/static/buttons.png') -18px -18px;
+}
+.hide-thread-linkz#show {
+	background: url('/static/buttons.png') -36px -18px;
+}
+.expandbutton#plus {
+	background: url('/static/buttons.png') -36px -18px;
+}
+.expandbutton#minus {
+	background: url('/static/buttons.png') -18px -18px;
+}
+#quick-reply th .close-btn {
+	background: url('/static/buttons.png') 0 -18px!important;
+}
+#quick-reply {
+	border-top: 1px solid #d9bfb7;
+}
+#quick-reply table {
+	border: 1px solid #d9bfb7;
+}
+#quick-reply tr#upload {
+	border-bottom: 1px solid #d9bfb7;
+}
+.post-menu ul {
+	background-color: #F0E0D6!important;
+}
+.post-menu li:hover {
+	background-color: #ffe!important;
+}
+input[type="text"]:focus, textarea:focus, .captcha_html:active {
+	border-color: #ea8;
+}
+div.ban.top h2 {
+	background: #800;
+	color: #FFF;
+}
+/* retina */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (	min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) { 
+	.hide-thread-linkz#hide {
+		background: url('/static/buttons@2x.png') 36px 36px!important;
+		background-size: 54px!important;
+	}
+	.hide-thread-linkz#show {
+		background: url('/static/buttons@2x.png') 18px 36px!important;
+		background-size: 54px!important;
+	}
+	#quick-reply th .close-btn {
+		background: url('/static/buttons@2x.png') 0px 36px!important;
+		background-size: 54px!important;
+	}
+	.expandbutton#plus {
+		background: url('/static/buttons@2x.png') 18px 36px!important;
+		background-size: 54px!important;
+	}
+	.expandbutton#minus {
+		background: url('/static/buttons@2x.png') 36px 36px!important;
+		background-size: 54px!important;
+	}
+	/* end retina */
+}
