@@ -13,7 +13,8 @@
 		
 		if ($settings['all']) {
 			$boards = listBoards(TRUE);
-		} else {
+		}
+		else {
 			$boards = explode(' ', $settings['boards']);
 		}
 				
@@ -21,8 +22,12 @@
 			foreach ($boards as $board) {
 				$b = new Catalog();
 
-
+					if ($settings['all']) {
+					$b->build($settings, $board['uri']);
+					}
+					else {
 					$b->build($settings, $board);
+					}
 
 
 				if (php_sapi_name() === "cli") echo "Rebuilding $board catalog...\n";
@@ -100,7 +105,7 @@
 					$config['additional_javascript'][] = $s;
 			}
 
-			file_write($config['dir']['home'] . $board_name . '/catalog.html', Element('themes/catalog/catalog.html', Array(
+			file_write($config['dir']['home'] . $board_name . '/catalog', Element('themes/catalog/catalog.html', Array(
 				'settings' => $settings,
 				'config' => $config,
 				'boardlist' => createBoardlist(),

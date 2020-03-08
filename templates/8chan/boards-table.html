@@ -5,7 +5,7 @@
 		<a href='/{{board['uri']}}/'>/{{board['uri']}}/</a>
 		{% if board['sfw'] %}<i class="fa fa-briefcase board-sfw" title="SFW"></i>{% endif %}
 	</p></td>
-	<td class="board-title"><p class="board-cell" title="Created {{board['time']}}">{{board['title']|e}}</p></td>
+	<td class="board-title"><p class="board-cell" title="{{board['title']}}">{{board['title']|e}}</p></td>
 	<td class="board-pph"><p class="board-cell board-pph-desc" title="{{board['pph']}} made in the last hour, {{board['pph_average']}} on average">{{board['pph']}}</p></td>
 	<td class="board-unique"><p class="board-cell">{{board['active']}}</p></td>
 	<td class="board-tags"><p class="board-cell">{% for tag in board.tags %}<a class="tag-link" href="{{tag_query}}{{tag|e}}">{{tag|e}}</a>{% endfor %}</p></td>

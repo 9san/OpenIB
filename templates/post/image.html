@@ -1,17 +1,13 @@
 <a href="
-	 {% if post.file|extension == 'webm' or post.file|extension == 'mp4' %}
-	 	{% if mod %}
-	 		https://8ch.net/player.php?v={{ uri_img }}{{ post.file }}&amp;t={{ post.filename|e('url') }}&amp;loop=1
-	 	{% else %}
-	 		{{ config.root }}player.php?v={{ uri_img }}{{ post.file }}&amp;t={{ post.filename|e('url') }}&amp;loop=1
-	 	{% endif %}
-	 {% else %}
+	{% if post.file|extension == 'webm' or post.file|extension == 'mp4' %}
+			/player.php?v={{ config.uri_img }}{{ post.file }}&amp;t={{ post.filename|e('url') }}&amp;loop=1
+		{% else %}
 		{{ config.uri_img }}{{ post.file }}
-	 {% endif %}
+	{% endif %}
 	"
 	 target="_blank"
 	{% if post.thumb == 'file' or post.modifiers['is_file'] == '1' or post.filename|extension == 'webm' or post.file|extension == 'mp4' %}
-		 class="file"
+		 class="file" style="float:left"
 	{% endif %}
 >
 	{% if post.thumb|extension == 'webm' or post.thumb|extension == 'mp4' %}
@@ -30,6 +26,8 @@
 		</video>
 	{% else %}
 		<img class="post-image" 
+			width="{{ post.thumbwidth }}" 
+			height="{{ post.thumbheight }}" 
 			src="
 				{% if post.thumb == 'file' %}
 					{{ config.root }}
@@ -43,9 +41,10 @@
 				{% else %}
 					{{ config.uri_thumb }}{{ post.thumb }}
 				{% endif %}
-			"
-			 style="width:{{ post.thumbwidth }}px;height:{{ post.thumbheight }}px" alt="" 
-			 data-md5="{{ post.hash|hex2bin|base64_encode }}"
+			" 
+			style="width:{{ post.thumbwidth }}px;height:{{ post.thumbheight }}px" 
+			alt="{{ file.size|filesize }}" 
+			data-md5="{{ post.hash|hex2bin|base64_encode }}"
 		/>
 	{% endif %}
 </a>

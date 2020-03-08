@@ -8,19 +8,29 @@
 		board_name = "{{ board }}";
 	</script>
 	{% include 'header.html' %}
-	<title>{{ board }} - Catalog</title>
+	<title>/{{ board }}/ - Catalog</title>
+	<style>select{height:initial;}</style>
 </head>
-<body class="theme-catalog active-catalog">
+<body class="9san theme-catalog active-catalog">
 	{{ boardlist.top }}
+	{% include 'banner.html' %}
 	<header>
-		<h1>{{ settings.title }} (<a href="{% if mod %}?{% endif %}{{link}}">/{{ board }}/</a>)</h1>
+		<h1>{{ settings.title }} (<a style="text-decoration:none" href="{% if mod %}?{% endif %}{{link}}"><span style="text-decoration:underline">/{{ board }}</span>/</a>)</h1>
 		<div class="subtitle">{{ settings.subtitle }}</div>
 	</header>
 	{% if board.uri not in config.banned_ad_boards %}
 		{% include 'ad_top.html' %}
 	{% endif %}
-
-        <span>{% trans 'Sort by' %}: </span>
+		<hr/>
+		<span id="thread-links-top">
+			[<a id="thread-return" href="{{ config.root }}{{ board }}/">{% trans %}Return{% endtrans %}</a>]<span class="margin-right"></span>
+			[<a id="thread-bottom" href="#bottom">{% trans %}Bottom{% endtrans %}</a>]<span class="margin-right"></span>
+			[<a id="thread-refresh" href="{{ config.root }}{{ board }}/{{ config.catalog_link }}">{% trans %}Refresh{% endtrans %}</a>]<span class="margin-right"></span>
+		</span>
+		
+		
+		<span id="catalog-options">
+        <span>{% trans 'Sort&nbsp;by' %}: </span>
         <select id="sort_by" style="display: inline-block">
                 <option selected value="bump:desc">{% trans 'Bump order' %}</option>
                 <option value="time:desc">{% trans 'Creation date' %}</option>
@@ -28,14 +38,15 @@
                 <option value="random:desc">{% trans 'Random' %}</option>
         </select>
  
-        <span>{% trans 'Image size' %}: </span>
+        <span>{% trans 'Image&nbsp;size' %}: </span>
         <select id="image_size" style="display: inline-block">
                 <option value="vsmall">{% trans 'Very small' %}</option>
                 <option selected value="small">{% trans 'Small' %}</option>
                 <option value="medium">{% trans 'Medium' %}</option>
                 <option value="large">{% trans 'Large' %}</option>
         </select>
-        <div class="threads">
+		</span>
+        <div class="threads"><hr/>
                 <div id="Grid">
                 {% for post in recent_posts %}
                         <div class="mix"
@@ -57,7 +68,7 @@
                                                  id="img-{{ post.id }}" data-subject="{% if post.subject %}{{ post.subject|e }}{% endif %}" data-name="{{ post.name|e }}" data-muhdifference="{{ post.muhdifference }}" class="{{post.board}} thread-image" title="{{post.bump|date('%b %d %H:%M')}}">
                                         </a>
                                                 <div class="replies">
-                                                        <strong>R: {{ post.reply_count }} / I: {{ post.image_count }} / P: {{ (loop.index // config.threads_per_page) + 1 }} {% include 'post/mod_attributes.html' %} </strong>
+                                                        <strong title="Replies: {{ post.reply_count }} - Images: {{ post.image_count }} - Page: {{ (loop.index // config.threads_per_page) + 1 }}">R: {{ post.reply_count }} / I: {{ post.image_count }} / P: {{ (loop.index // config.threads_per_page) + 1 }} {% include 'post/mod_attributes.html' %} </strong>
 							{% include 'catalog_controls.html' %}
 							{% if post.subject %}
 								<p class="intro">
@@ -78,15 +89,14 @@
         </div>
 	
 	<hr/>
-	<footer>
-		<p class="unimportant" style="margin-top:20px;text-align:center;">- <a href="http://tinyboard.org/">Tinyboard</a> + 
-			<a href='https://int.vichan.net/devel/'>vichan</a> {{ config.version }} -
-		<br><a href="http://tinyboard.org/">Tinyboard</a> Copyright &copy; 2010-2014 Tinyboard Development Group    
-		<br><a href="https://int.vichan.net/devel/">vichan</a> Copyright &copy; 2012-2014 vichan-devel
-		<br><a href="https://8ch.net/8code/">infinity</a> Copyright &copy; 2013-2015 Fredrick Brennan &amp; Infinity Development Group
-		<br><a href="https://github.com/OpenIB/OpenIB/">OpenIB</a> by <a target="_blank" href="https://twitter.com/codemonkeyz">Code Monkey ★</a></p>
-		{% for footer in config.footer %}<p class="unimportant" style="text-align:center;">{{ footer }}</p>{% endfor %}
-	</footer>
+	<a id="bottom"></a>
+	<span id="thread-links-top">
+			[<a id="thread-return" href="{{ config.root }}{{ board }}/">{% trans %}Return{% endtrans %}</a>]<span class="margin-right"></span>
+			[<a id="thread-top" href="#top">{% trans %}Top{% endtrans %}</a>]<span class="margin-right"></span>
+			[<a id="thread-refresh" href="{{ config.root }}{{ board }}/{{ config.catalog_link }}">{% trans %}Refresh{% endtrans %}</a>]<span class="margin-right"></span>
+		</span>
+	<hr>
+	{% include 'footer.html' %}
 	<script type="text/javascript">{% raw %}
 		var styles = {
 			{% endraw %}

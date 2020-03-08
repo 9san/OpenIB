@@ -4,8 +4,8 @@
 	// Theme name
 	$theme['name'] = 'Overboard (Ukko)';
 	// Description (you can use Tinyboard markup here)
-	$theme['description'] = 'Board with threads and messages from all boards';
-	$theme['version'] = 'v0.2';
+	$theme['description'] = 'Board with threads and messages from all indexed boards. TODO: SFW toggle, exclude boards "banned" from frontpage.';
+	$theme['version'] = 'v0.3';
 	
 	// Theme configuration	
 	$theme['config'] = array();

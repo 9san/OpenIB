@@ -1,0 +1,8 @@
+<div class="ban" id="announcements">
+	<h2>Announcements</h2>
+	<table class="full" id="blotter">
+	{% for blotter_announcement in config.blotter_announcement %}
+	<tr>{{ blotter_announcement }}</tr>
+	{% endfor %}
+	</table>
+</div>

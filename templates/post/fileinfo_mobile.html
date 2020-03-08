@@ -1,0 +1,35 @@
+	{% if post.embed %}
+	{{ post.embed }}
+    {% else %}
+    <div class="files">
+    	{% if not post.thread and not post.files %}
+    	<div class="file">
+    		<a href="{{ post.root }}{{ board.dir }}{{ config.dir.res }}{{ config.file_page|sprintf(post.id) }}">
+    			<img class="post-image" src="{{ config.root }}{{ config.no_file_image }}" width="120" height="120" alt=""/>
+    		</a>
+    	</div>
+    	{% endif %}	
+    {% for file in post.files %}
+        <div class="file{% if post.num_files > 1 %} multifile" style="width:{{ file.thumbwidth + 40 }}px"{% else %}"{% endif %}>
+	{% if file.file == 'deleted' %}
+		<img class="post-image deleted" src="{{ config.root }}{{ config.image_deleted }}" alt="" />
+	{% else %}
+		<span class="mobile-info">{% include "post/image_mobile.html" with {'post':file} %}
+		<p class="fileinfo" style="width:{{ file.thumbwidth / 2 }}px"><a href="{{ config.uri_img }}{{ file.file }}">
+		</a> <span class="unimportant" {% if config.show_filename and file.filename %} data-tooltip="
+		
+		{% if file.filename|length > config.max_filename_display %}
+					{{ file.filename|truncate_filename(config.max_filename_display)|e|bidi_cleanup }}
+				{% else %}
+					{{ file.filename|e|bidi_cleanup }}
+				{% endif %}
+		"{% endif %}>
+			{{ file.size|filesize }} {{ file.extension|upper }}
+		{% include "post/image_identification.html" %}
+		{% include "post/file_controls.html" %}</span></p>
+		</span>
+	{% endif %}
+</div>
+    {% endfor %}
+</div>
+    {% endif %}

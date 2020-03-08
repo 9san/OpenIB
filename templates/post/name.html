@@ -1,5 +1,5 @@
 {% set capcode = post.capcode|capcode %}
-{% if post.email|length > 0 and (config.hide_sage!=true or post.email!='sage') %}
+{% if post.email|length > 0 and (config.hide_sage!=true or post.email!='sage') and config.hide_email!=true %}
 	{# start email #}
 	<a class="email" href="mailto:{{ post.email }}">
 {% endif %}
@@ -7,12 +7,12 @@
 	{% if post.trip|length > 0 %}
 		<span {% if capcode.trip %}style="{{ capcode.trip }}" {% endif %}class="trip">{{ post.trip }}</span>
 	{% endif %}
-{% if post.email|length > 0 %}
-	{# end email #}
+{% if post.email|length > 0 and (config.hide_sage!=true or post.email!='sage') and config.hide_email!=true %}
 	</a>
-{% endif %}&nbsp;
+	{# end email #}
+{% endif %} 
 {% if config.show_sages and post.email == 'sage' %}
-	<span class="sage">SAGE!&nbsp;</span>
+	<span class="sage">{% if ukko %}{{ config.ukko_sage }}{% else %}{{ config.sage }}{% endif %}&nbsp;</span>
 {% endif %}
 {% if capcode %}
         {{ capcode.cap }}

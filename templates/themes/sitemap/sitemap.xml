@@ -3,7 +3,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	{% for board in boards %}
 		<url>
-			<loc>{{ settings.url ~ (config.board_path | format(board)) ~ config.file_index }}</loc>
+			<loc>{{ settings.url ~ (config.board_path | format(board)) }}</loc>
 		</url>
 	{% endfor %}
 	{% for board, thread_list in threads %}

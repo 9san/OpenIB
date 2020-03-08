@@ -1,0 +1,32 @@
+	{% if post.embed %}
+	{{ post.embed }}
+    {% else %}
+    <div class="files">
+    {% for file in post.files %}
+        <div class="file{% if post.num_files > 1 %} multifile" style="width:{{ file.thumbwidth + 40 }}px"{% else %}"{% endif %}>
+	{% if file.file == 'deleted' %}
+		<p class="fileinfo">File: Deleted</p> <img class="post-image deleted" src="{{ config.root }}{{ config.image_deleted }}" alt="" style="width:140px;height:50px;"/>
+	{% else %}
+		<p class="fileinfo">{% if file.thumb == 'spoiler' %}{% trans %}Spoiler: {% endtrans %} {% else %}File: {% endif %}<a href="{{ config.uri_img }}{{ file.file }}">
+			{% if config.show_filename and file.filename %}
+					<span class="postfilename" title="{{ file.filename|e|bidi_cleanup }}">{{ file.filename|truncate_filename(config.max_filename_display)|e|bidi_cleanup }}</span>
+			{% else %}
+					{{ file.file }}
+			{% endif %}		
+		</a> <span class="unimportant block">
+		(
+			{{ file.size|filesize }}
+			{% if file.width and file.height %}
+				, {{ file.width}}x{{ file.height }}
+				{% if config.show_ratio %}
+					, {{ ratio(file.width, file.height) }}
+				{% endif %}
+			{% endif %}	)
+		{% include "post/image_identification.html" %}
+		{% include "post/file_controls.html" %}</span></p>
+	{% include "post/image.html" with {'post':file} %}
+	{% endif %}
+</div>
+    {% endfor %}
+</div>
+    {% endif %}

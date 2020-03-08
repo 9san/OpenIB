@@ -5,7 +5,7 @@
 	$theme['name'] = 'Catalog';
 	// Description (you can use Tinyboard markup here)
 	$theme['description'] = 'Show a post catalog.';
-	$theme['version'] = 'v0.2';
+	$theme['version'] = 'v0.3';
 	
 	// Theme configuration	
 	$theme['config'] = Array();
@@ -23,7 +23,7 @@
 		$__default_boards[] = $__board['uri'];
 	
 	$theme['config'][] = Array(
-		'title' => 'Included boards',
+		'title' => 'Excluded',
 		'name' => 'boards',
 		'type' => 'text',
 		'comment' => '(space seperated)',
@@ -34,6 +34,7 @@
 		'title' => 'Use all boards - &infin;chan',
 		'name' => 'all',
 		'type' => 'checkbox',
+		'comment' => 'Dev note: I\'m not even sure if anything is excluded either way.',
 		'default' => false
 	);
 	

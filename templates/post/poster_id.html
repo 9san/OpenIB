@@ -1,3 +1,4 @@
+{% if not no_ids %}
 {% if config.poster_ids or (mod|hasPermission(config.mod.show_ip_less, board.uri)) %}
 	{% if post.ip == config.tor_ip_hash %}
 		 <span class="poster_id" title="This user is posting via the Tor hidden service.">000000</span>
@@ -6,4 +7,5 @@
 	{% else %}
 		 <span class="poster_id">{{ poster_id(post.ip, post.id, board.uri) }}</span>
 	{% endif %}
+{% endif %}
 {% endif %}

@@ -1,7 +1,7 @@
 {% if config.display_flags and post.modifiers.flag %}
 	<img
 		{% if config.country_flags_condensed %}
-			 class="flag flag-{{ post.modifiers.flag }}" src="{{ config.image_blank }}"
+			 class="flag flags-{{ post.modifiers.flag }}" src="{{ config.image_blank }}"
 		{% else %}
 			 class="flag" src="{% if config.root != '/' %}{{ config.root }}{% endif %}{{ config.uri_flags|sprintf(post.modifiers.flag) }}"
 		{% endif %}

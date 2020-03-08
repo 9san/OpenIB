@@ -2,7 +2,7 @@
 	require 'info.php';
 	
 	function sitemap_build($action, $settings, $board) {
-		global $config;
+		global $config, $board;
 		
 		// Possible values for $action:
 		//	- all (rebuild everything, initialization)
@@ -22,21 +22,48 @@
 				}
 			}
 		}
-	
-			$boards = explode(' ', $settings['boards']);
-		
-			$threads = array();
-		
-			foreach ($boards as $board) {
-				$query = query(sprintf("SELECT `id` AS `thread_id`, (SELECT `time` FROM ``posts_%s`` WHERE `thread` = `thread_id` OR `id` = `thread_id` ORDER BY `time` DESC LIMIT 1) AS `lastmod` FROM ``posts_%s`` WHERE `thread` IS NULL", $board, $board)) or error(db_error());
-				$threads[$board] = $query->fetchAll(PDO::FETCH_ASSOC);
-			}
+			
+			if ($settings['all']) {
+				$boards = listBoards();
+				$threads = array();
+				$__indexed_boards = Array();
 				
-			file_write($settings['path'], Element('themes/sitemap/sitemap.xml', Array(
-				'settings' => $settings,
-				'config' => $config,
-				'threads' => $threads,
-				'boards' => $boards,
-			)));
+				foreach ($boards as $board) {
+					if(!$board['indexed'])
+						continue;
+					$query = query(sprintf("SELECT `id` AS `thread_id`, (SELECT `time` FROM ``posts_%s`` WHERE `thread` = `thread_id` OR `id` = `thread_id` ORDER BY `time` DESC LIMIT 1) AS `lastmod` FROM ``posts_%s`` WHERE `thread` IS NULL", $board['uri'], $board['uri'])) or error(db_error());
+					$threads[$board['uri']] = $query->fetchAll(PDO::FETCH_ASSOC);
+				}
+				
+				foreach ($boards as $board) {
+					if(!$board['indexed']) {
+						continue;
+					}
+					$indexed_boards[] = $board['uri'];
+				}
+
+				file_write($settings['path'], Element('themes/sitemap/sitemap.xml', Array(
+					'settings' => $settings,
+					'config' => $config,
+					'threads' => $threads,
+					'boards' => $indexed_boards,
+				)));
+			}
+			else {
+				$boards = explode(' ', $settings['boards']);
+				$threads = array();
+			
+				foreach ($boards as $board) {
+					$query = query(sprintf("SELECT `id` AS `thread_id`, (SELECT `time` FROM ``posts_%s`` WHERE `thread` = `thread_id` OR `id` = `thread_id` ORDER BY `time` DESC LIMIT 1) AS `lastmod` FROM ``posts_%s`` WHERE `thread` IS NULL", $board, $board)) or error(db_error());
+					$threads[$board] = $query->fetchAll(PDO::FETCH_ASSOC);
+				}
+					
+				file_write($settings['path'], Element('themes/sitemap/sitemap.xml', Array(
+					'settings' => $settings,
+					'config' => $config,
+					'threads' => $threads,
+					'boards' => $boards,
+				)));
+			}
 		
 	}

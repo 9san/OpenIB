@@ -32,7 +32,7 @@
 
 			$query = '';
 			foreach($boards as &$_board) {
-				if((!$_board['indexed']))
+				if(!$_board['indexed'])
 					continue;
 				if(in_array($_board['uri'], explode(' ', $this->settings['exclude'])))
 					continue;
@@ -87,14 +87,17 @@
 
 
 					$thread->posts = array_reverse($thread->posts);
-					$body .= '<h2 class="ukkoboard" style="margin-bottom:4px"><a href="' . $config['root'] . $post['board'] . '">/' . $post['board'] . '/</a></h2>';
+					$body .= '<h2 class="ukkoboard"><a href="' . $config['root'] . $post['board'] . '">/' . $post['board'] . '/</a></h2>';
 					$body .= $thread->build(true);
 				} else {
-					$page = 'index';
+					$page = 'index.html';
 					if(floor($threads[$post['board']] / $config['threads_per_page']) > 0) {
 						$page = floor($threads[$post['board']] / $config['threads_per_page']) + 1;
 					}
-					$overflow[] = array('id' => $post['id'], 'board' => $post['board'], 'page' => $page . '.html');
+					$overflow[] = array(
+					'id' => $post['id'],
+					'board' => $post['board'],
+					'page' => $page);
 				}
 
 				$count += 1;
@@ -103,14 +106,14 @@
 			$body .= '<script> var overflow = ' . json_encode($overflow) . '</script>';
 			$body .= '<script type="text/javascript" src="/'.$this->settings['uri'].'/ukko.js"></script>';
 
-			$config['default_stylesheet'] = array('Yotsuba B', $config['stylesheets']['Yotsuba B']);
+			$config['default_stylesheet'] = array('Yotsuba Blue', $config['stylesheets']['Yotsuba Blue']);
 
 			return Element('index.html', array(
 				'config' => $config,
 				'board' => $board,
-				'no_post_form' => true,
-				'no_search_form' => true,
+				'ukko' => true,
 				'config.poster_ids' => false,
+				'no_ids' => true, //might be bugged
 				'body' => $body,
 				'mod' => $mod,
 				'boardlist' => createBoardlist($mod),
