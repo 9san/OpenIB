@@ -26,6 +26,7 @@ function setupVideo(thumb, url) {
             thumb.style.display = "inline";
             video.style.maxWidth = "inherit";
             video.style.maxHeight = "inherit";
+			videoHide.style.display = "none";
         }
     }
 
@@ -47,18 +48,17 @@ function setupVideo(thumb, url) {
             video.loop = loop;
             video.innerText = _("Your browser does not support HTML5 video.");
 
-            videoHide = document.createElement("img");
-            videoHide.src = configRoot + "static/collapse.gif";
-            videoHide.alt = "[ - ]";
-            videoHide.title = "Collapse video";
-            videoHide.style.marginLeft = "-15px";
-            videoHide.style.cssFloat = "left";
+            videoHide = document.createElement("span");
+            videoHide.alt = "[Close]";
+			videoHide.innerHTML = "<div>[<span class='fakelink'>Close</span>]</div>";
+            videoHide.title = "Close video";
+			videoHide.style.cursor = "text";
             videoHide.addEventListener("click", unexpand, false);
 
             videoContainer = document.createElement("div");
-            videoContainer.style.paddingLeft = "15px";
+            videoContainer.style.paddingLeft = "5px";
             videoContainer.style.display = "none";
-            videoContainer.appendChild(videoHide);
+			thumb.parentNode.querySelector(".fileinfo").append(videoHide);
             videoContainer.appendChild(video);
             thumb.parentNode.insertBefore(videoContainer, thumb.nextSibling);
 
@@ -91,7 +91,7 @@ function setupVideo(thumb, url) {
             video.style.position = "static";
             video.style.pointerEvents = "inherit";
             video.style.display = "inline";
-            videoHide.style.display = "inline";
+            videoHide.style.display = "inline-block";
             videoContainer.style.display = "block";
             videoContainer.style.position = "static";
             video.parentNode.parentNode.removeAttribute('style');
@@ -112,7 +112,7 @@ function setupVideo(thumb, url) {
 
     function expand2() {
         video.style.maxWidth = "100%";
-        video.style.maxHeight = window.innerHeight + "px";
+        video.style.maxHeight = window.innerHeight / 2 + "px";
         var bottom = video.getBoundingClientRect().bottom;
         if (bottom > window.innerHeight) {
             window.scrollBy(0, bottom - window.innerHeight);
@@ -190,8 +190,8 @@ function setupVideo(thumb, url) {
         }, false);
     }
 
-    loopControls[0].textContent = _("[play once]");
-    loopControls[1].textContent = _("[loop]");
+    loopControls[0].textContent = _("");
+    loopControls[1].textContent = _("");
     loopControls[(setting("videoloop") ? 1 : 0)].style.fontWeight = "bold";
     for (var i = 0; i < 2; i++) {
         setupLoopControl(i);

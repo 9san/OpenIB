@@ -36,7 +36,7 @@ $(document).ready(function(){
 		}
 	}
 
-	var fields_to_hide = 'div.post,div.video-container,video,iframe,img:not(.unanimated),canvas,p.fileinfo,a.hide-thread-link,div.new-posts,br';
+	var fields_to_hide = 'div.post,div.post.reply,div.video-container,video,iframe,img:not(.unanimated),canvas,p.fileinfo,a.hide-thread-link,div.new-posts,br,div.files';
 	
 	var do_hide_threads = function() {
 		var id = $(this).children('p.intro').children('a.post_no:eq(1)').text();
@@ -58,9 +58,7 @@ $(document).ready(function(){
 				
 				var hidden_div = thread_container.find('div.post.op > p.intro').clone();
 				hidden_div.addClass('thread-hidden');
-				hidden_div.find('a[href]:not([href$=".html"]),input').remove();
-				hidden_div.html(hidden_div.html().replace(' [] ', ' '));
-				hidden_div.html(hidden_div.html().replace(' [] ', ' '));
+				hidden_div.find('input,a.post-btn').remove();
 				
 				$('<a class="unhide-thread-link" style="float:left;margin-right:5px;margin-left:0px;" href="javascript:void(0)">[+]</a><span> </span>')
 					.insertBefore(hidden_div.find(':first'))

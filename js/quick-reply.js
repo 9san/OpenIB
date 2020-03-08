@@ -31,8 +31,8 @@
 		#quick-reply table {\
 			border-collapse: collapse;\
 			background: ' + reply_background + ';\
-			border-style: ' + reply_border_style + ';\
-			border-width: ' + reply_border_width + ';\
+			border-style:solid solid solid solid;\
+			border-width:1px 1px 1px 1px;\
 			border-color: ' + reply_border_color + ';\
 			margin: 0;\
 			width: 100%;\
@@ -215,7 +215,7 @@
 		$(window).ready(function() {
 			if (settings.get('hide_at_top', true)) {
 				$(window).scroll(function() {
-					if ($(this).width() <= 600)
+					if ($(this).width() <= 300)
 						return;
 					if ($(this).scrollTop() < $origPostForm.offset().top + $origPostForm.height() - 100)
 						$postForm.fadeOut(100);
@@ -237,7 +237,7 @@
 	};
 	
 	$(window).on('cite', function(e, id, with_link) {
-		if ($(this).width() <= 600)
+		if ($(this).width() <= 300)
 			return;
 		show_quick_reply();
 		if (with_link) {
@@ -292,7 +292,7 @@
 				$('.quick-reply-btn').hide();
 				
 				$(window).scroll(function() {
-					if ($(this).width() <= 600)
+					if ($(this).width() <= 300)
 						return;
 					if ($(this).scrollTop() < $('form[name="post"]:first').offset().top + $('form[name="post"]:first').height() - 100)
 						$('.quick-reply-btn').fadeOut(100);

@@ -12,8 +12,10 @@
  *   $config['additional_javascript'][] = 'js/show-backlinks.js';
  *
  */
-
+if (active_page != "ukko" && active_page != "catalog") {
 onready(function(){
+
+	
 	var showBackLinks = function() {
 		var reply_id = $(this).attr('id').replace(/^(reply|op)_/, '');
 		
@@ -42,7 +44,6 @@ onready(function(){
 			var $link = $('<a class="mentioned-' + reply_id + '" onclick="highlightReply(\'' + reply_id + '\', event);" href="#' + reply_id + '">&gt;&gt;' +
 				reply_id + '</a>');
 			$link.appendTo($mentioned);
-			$link.after(" ");
 			
 			if (window.init_hover) {
 				$link.each(init_hover);
@@ -61,4 +62,4 @@ onready(function(){
 		}
 	});
 });
-
+}

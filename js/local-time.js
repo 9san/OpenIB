@@ -75,10 +75,10 @@ $(document).ready(function(){
 
 			if (!localStorage.show_relative_time || localStorage.show_relative_time === 'false') {
 				times[i].innerHTML = dateformat(iso8601(t));
-				times[i].setAttribute('title', timeDifference(currentTime, postTime.getTime()));
+				times[i].setAttribute('data-tooltip', timeDifference(currentTime, postTime.getTime()));
 			} else {
 				times[i].innerHTML = timeDifference(currentTime, postTime.getTime());
-				times[i].setAttribute('title', dateformat(iso8601(t)));
+				times[i].setAttribute('data-tooltip', dateformat(iso8601(t)));
 			}
 		
 		}
@@ -86,7 +86,7 @@ $(document).ready(function(){
 
 	if (window.Options && Options.get_tab('general') && window.jQuery) {
 		var interval_id;
-		Options.extend_tab('general', '<label id="show-relative-time"><input type="checkbox">' + _('Show relative time') + '</label>');
+		Options.extend_tab('general', '<label id="show-relative-time"><input type="checkbox">' + _(' Show relative time') + '</label>');
 
 		$('#show-relative-time>input').on('change', function() {
 			if (localStorage.show_relative_time === 'true') {

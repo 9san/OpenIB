@@ -17,8 +17,6 @@
 if (active_page == 'ukko' || active_page == 'index' || (window.Options && Options.get_tab('general')))
 $(document).ready(function(){
 	var hide_locked_threads = localStorage['hidelockedthreads'] ? true : false;
-
-	$('<style type="text/css"> img.hidden{ opacity: 0.1; background: grey; border: 1px solid #000; } </style>').appendTo($('head'));
 	
 	var hideLockedThread = function($thread) {
 		if (active_page == 'ukko' || active_page == 'index')

@@ -39,11 +39,11 @@ function changeSetting(name, value) {
 var settingsMenu = document.createElement("div");
 var prefix = "", suffix = "", style = "";
 if (window.Options) {
-  var tab = Options.add_tab("webm", "video-camera", _("WebM"));
+  var tab = Options.add_tab("video", "video-camera", _("Video"));
   $(settingsMenu).appendTo(tab.content);
 }
 else {
-  prefix = '<a class="unimportant" href="javascript:void(0)">'+_('WebM Settings')+'</a>';
+  prefix = '<a class="unimportant" href="javascript:void(0)">'+_('Video Settings')+'</a>';
   settingsMenu.style.textAlign = "right";
   settingsMenu.style.background = "inherit";
   suffix = '</div>';
@@ -51,11 +51,12 @@ else {
 }
 
 settingsMenu.innerHTML = prefix
-    + '<div style="'+style+'">'
-    + '<label><input type="checkbox" name="videoexpand">'+_('Expand videos inline')+'</label><br>'
-    + '<label><input type="checkbox" name="videohover">'+_('Play videos on hover')+'</label><br>'
-    + '<label><input type="checkbox" name="videoloop">'+_('Loop videos by default')+'</label><br>'
-    + '<label><input type="range" name="videovolume" min="0" max="1" step="0.01" style="width: 4em; height: 1ex; vertical-align: middle; margin: 0px;">'+_('Default volume')+'</label><br>'
+    + '<fieldset><legend>WebM / MP4</legend>'
+    + '<label><input type="checkbox" name="videoexpand">'+_('Expand videos inline')+'</label>'
+    + '<label><input type="checkbox" name="videohover">'+_('Play videos on hover')+'</label>'
+    + '<label><input type="checkbox" name="videoloop">'+_('Loop videos by default')+'</label>'
+    + '<label><input type="range" name="videovolume" min="0" max="1" step="0.01" style="width: 4em; height: 1ex; vertical-align: middle; margin: 0px;">'+_('Default volume')+'</label>'
+	+ '</fieldset>'
     + suffix;
 
 function refreshSettings() {

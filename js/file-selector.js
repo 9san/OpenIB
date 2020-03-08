@@ -10,7 +10,7 @@ function init_file_selector(max_images) {
 $(document).ready(function () {
 	// add options panel item
 	if (window.Options && Options.get_tab('general')) {
-		Options.extend_tab('general', '<label id="file-drag-drop"><input type="checkbox">' + _('Drag and drop file selection') + '</label>');
+		Options.extend_tab('general', '<label id="file-drag-drop"><input type="checkbox">' + _(' Drag and drop file selection') + '</label>');
 
 		$('#file-drag-drop>input').on('click', function() {
 			if ($('#file-drag-drop>input').is(':checked')) {
@@ -35,7 +35,10 @@ if (typeof max_images == 'undefined') {
 }
 
 var files = [];
-$('#upload_file').hide();  // hide the original file selector
+if ( $( "#upload_file" ).length ) {
+    $( "#upload_file" ).remove();
+}
+//$('#upload_file').hide();  // hide the original file selector
 $('.dropzone-wrap').css('user-select', 'none').show();  // let jquery add browser specific prefix
 
 function addFile(file) {
@@ -91,6 +94,14 @@ $(document).on('ajax_before_post', function (e, formData) {
 $(document).on('ajax_after_post', function () {
 	files = [];
 	$('.file-thumbs').empty();
+
+	/*Clear all fields / local storage from form input after posting a thread / comment*/
+	if(localStorage.auto_clear_post_fields === 'true'){
+		$('form[name="post"]').trigger('reset');
+		localStorage.email = "";
+		localStorage.name = "";
+		sessionStorage.body = "";
+	}
 });
 
 var dragCounter = 0;

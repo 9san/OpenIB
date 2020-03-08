@@ -11,7 +11,7 @@
  */
 
 if (!localStorage.favorites) {
-	localStorage.favorites = '["operate","b"]';
+	localStorage.favorites = '["bugs"]';
 }
 
 function favorite(board) {
@@ -39,7 +39,7 @@ function handle_boards(data) {
                         link_mod = "?";
                 }
 
-		boards.push('<a href="'+link_mod+'/'+v+(window.active_page === 'catalog' ? '/catalog.html' : '')+'">'+v+'</a>');
+		boards.push('<a href="'+link_mod+'/'+v+(window.active_page === 'catalog' ? '/catalog' : '/')+'">'+v+'</a>');
 	})
 
 	if (boards[0]) {
@@ -57,13 +57,13 @@ function add_favorites() {
 	$('.boardlist').append(boards);
 };
 
-if (active_page == 'thread' || active_page == 'index' || active_page == 'catalog') {
+if (active_page == 'thread' || active_page == 'index' || active_page == 'catalog' || active_page == 'page' || active_page == 'ukko') {
 	$(document).ready(function(){
 		var favorites = JSON.parse(localStorage.favorites);
 		var is_board_favorite = ~$.inArray(board_name, favorites);
-
+if (active_page == 'thread' || active_page == 'index' || active_page == 'catalog') {
 		$('header>h1').append('<a id="favorite-star" href="#" data-active="'+(is_board_favorite ? 'true' : 'false')+'" style="color: '+(is_board_favorite ? 'yellow' : 'grey')+'; text-decoration:none">\u2605</span>');
-		add_favorites();
+}		add_favorites();
 
 		$('#favorite-star').on('click', function(e) {
 			e.preventDefault();

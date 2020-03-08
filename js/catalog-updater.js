@@ -29,7 +29,7 @@ $(document).ready(function(){
         }
 
         // Add an update catalog link
-        $('span.catalog_search').after("&nbsp;<span id='updater_catalog_panel'><a href='#' style='text-decoration:none; cursor:pointer;' id='update_catalog'>[Update]</a><label id='auto_update_catalog_status'><input type='checkbox' id='auto_update_catalog_cb'></label> "+_("Auto")+" (<span id='update_catalog_secs'></span>)</span>");
+		$('span.catalog_search').after(" <span id='updater_catalog_panel'>[<a href='#' style='text-decoration:none; cursor:pointer;' id='update_catalog'>Update</a>]&nbsp;[<label id='auto_update_catalog_status'><input type='checkbox' id='auto_update_catalog_cb'> "+_("Auto")+"</label>] <span id='update_catalog_secs'></span></span>");
 
         // Set the updater checkbox according to user setting
         if (localStorage.auto_catalog_update === 'true') {
@@ -83,8 +83,9 @@ $(document).ready(function(){
                                         $(".grid-li").removeClass("grid-size-large");
                                         $(".grid-li").addClass("grid-size-"+v_images_size);
 
+										$('#update_catalog_secs').text("");
                                         initImageHover();
-                                        $('#update_catalog_secs').text("");
+                                        
                                 }
                         });
                 }

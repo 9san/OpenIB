@@ -24,8 +24,8 @@
 
 
 $(document).ready(function(){
-	if (window.Options && Options.get_tab('general')) {
-		Options.extend_tab("general", "<span id='youtube-size'>" + _('YouTube size') + ": <input type='number' id='youtube-width' value='360'>x<input type='number' id='youtube-height' value='270'>");
+	if (window.Options && Options.get_tab('video')) {
+		Options.extend_tab("video", "<fieldset id='youtube'><legend>YouTube</legend><span id='youtube-size'>" + _('YouTube size') + ": <input type='number' id='youtube-width' value='360'>x<input type='number' id='youtube-height' value='270'></fieldset>");
 
 		if (typeof localStorage.youtube_size === 'undefined') {
 			localStorage.youtube_size = '{"width":360,"height":270}';
@@ -54,7 +54,7 @@ $(document).ready(function(){
 		}
 		
 		$('div.video-container a', tag).click(function() {
-			$(this.parentNode).html('<iframe style="float:left;margin: 10px 20px" type="text/html" '+
+			$(this.parentNode).html('<iframe style="float:left;margin:0px 20px 10px 20px" type="text/html" '+
 				'width="'+our_yt.width+'" height="'+our_yt.height+'" src="//www.youtube.com/embed/' + $(this.parentNode).data('video') +
 				'?autoplay=1&html5=1'+ $(this.parentNode).data('params') +'" allowfullscreen frameborder="0"/>');
 
@@ -63,7 +63,7 @@ $(document).ready(function(){
 		
                 /*Vlive*/
                 $('div.video-container-vlive a', tag).click(function() {
-                   $(this.parentNode).append('<iframe style="float:left;margin: 10px 20px" type="text/html" '+
+                   $(this.parentNode).append('<iframe style="float:left;margin:0px 20px 10px 20px" type="text/html" '+
                     'width="'+our_yt.width+'" height="'+our_yt.height+'" src="https://www.vlive.tv/embed/' + $(this.parentNode).data('video') +
                     '#playerBoxArea" allowfullscreen scrolling="no" frameborder="0"/>');
                    $(this).remove();

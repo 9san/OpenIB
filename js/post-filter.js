@@ -1,4 +1,4 @@
-if (active_page === 'thread' || active_page === 'index' || active_page === 'catalog') {
+if (active_page === 'thread' || active_page === 'index' || active_page === 'catalog' || active_page === 'ukko') {
 	$(document).on('menu_ready', function () {
 		'use strict';
 		
@@ -176,13 +176,13 @@ if (active_page === 'thread' || active_page === 'index' || active_page === 'cata
 
 			$(ele).data('hidden', true);
 			if ($ele.hasClass('op')) {
-				$ele.parent().find('.body, .files, .video-container').not($ele.children('.reply').children()).hide();
-
+				$ele.parent().find('.body, .files, .video-container, .post_modified, p.fileinfo, .bothfile, .files-multi-mobile').not($ele.children('.reply').children()).hide();
+				$ele.parent().find('.hide-thread-linkz').attr("id", "show");
 				// hide thread replies on index view
-				if (active_page == 'index') $ele.parent().find('.omitted, .reply:not(.hidden), post_no, .mentioned, br').hide();
+				if (active_page == 'index' || active_page == 'ukko') $ele.parent().find('.omitted, .reply:not(.hidden), post_no, .mentioned, br, .bothfile, .files-multi-mobile').hide();
 			} else {
 				// normal posts
-				$ele.children('.body, .files, .video-container').hide();
+				$ele.children('.body, .files, .video-container, .post_modified, p.fileinfo, .bothfile, .files-multi-mobile').hide();
 			}
 		}
 		function show(ele) {
@@ -190,11 +190,12 @@ if (active_page === 'thread' || active_page === 'index' || active_page === 'cata
 
 			$(ele).data('hidden', false);
 			if ($ele.hasClass('op')) {
-				$ele.parent().find('.body, .files, .video-container').show();
-				if (active_page == 'index') $ele.parent().find('.omitted, .reply:not(.hidden), post_no, .mentioned, br').show();
+				$ele.parent().find('.body, .files, .video-container, .post_modified, p.fileinfo').show();
+				$ele.parent().find('.hide-thread-linkz').attr("id", "hide");
+				if (active_page == 'index' || active_page == 'ukko') $ele.parent().find('.omitted, .reply:not(.hidden), post_no, .mentioned, br, .bothfile, .files-multi-mobile').show();
 			} else {
 				// normal posts
-				$ele.children('.body, .files, .video-container').show();
+				$ele.children('.body, .files, .video-container, .post_modified, p.fileinfo, .bothfile, .files-multi-mobile').show();
 			}
 		}
 
@@ -344,19 +345,21 @@ if (active_page === 'thread' || active_page === 'index' || active_page === 'cata
 			/*if ($(ele).find('.hide-thread-link').length)
 				$('.hide-thread-link').remove();*/
 
-			if ($(ele).hasClass('op') && !$(ele).find('.hide-thread-link').length) {
-				$('<a class="hide-thread-link" style="float:left;margin-right:5px" href="javascript:void(0)">[' + ($(ele).data('hidden') ? '+' : '&ndash;') + ']</a>')
-					.insertBefore($(ele).find(':not(h2,h2 *):first'))
+			if ($(ele).hasClass('op') && !$(ele).parent().find('.hide-thread-linkz').length) {
+				$('<a class="hide-thread-linkz" id="' + ($(ele).data('hidden') ? 'show' : 'hide') + '" href="javascript:void(0)">[' + ($(ele).data('hidden') ? '+' : '&ndash;') + ']</a>')
+					.insertBefore($(ele).parent().find('p.intro:first,div.files:first').eq(0))
 					.click(function() {
 						var postId = $(ele).find('.post_no').not('[id]').text();
 						var hidden = $(ele).data('hidden');
 					
 						if (hidden) {
 							blacklist.remove.post(pageData.boardId, threadId, postId, false);
-							$(this).html('[&ndash;]');
+							$(this).text('[–]');
+							$(this).attr("id", "hide");
 						} else {
 							blacklist.add.post(pageData.boardId, threadId, postId, false);
 							$(this).text('[+]');
+							$(this).attr("id", "show");
 						}
 					});
 			}

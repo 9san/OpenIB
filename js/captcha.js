@@ -14,6 +14,8 @@ function actually_load_captcha(provider, extra) {
   $.getJSON(provider, {mode: 'get', extra: extra}, function(json) {
     $(".captcha .captcha_cookie").val(json.cookie);
     $(".captcha .captcha_html").html(json.captchahtml);
+    $(".captcha .captcha_html").show();
+    $("input.captcha_text").val("");
 
     setTimeout(function() {
       redo_events(provider, extra);      
@@ -23,7 +25,7 @@ function actually_load_captcha(provider, extra) {
 
 function load_captcha(provider, extra) {
   $(function() {
-    $(".captcha>td").html("<input class='captcha_text' type='text' name='captcha_text' size='25' maxlength='6' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false'>"+
+    $(".captcha>td").html("<input style='width: 255px;' class='captcha_text' type='text' name='captcha_text' size='25' maxlength='6' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false'>"+
 			  "<input class='captcha_cookie' name='captcha_cookie' type='hidden'>"+
 			  "<div class='captcha_html'></div>");
 

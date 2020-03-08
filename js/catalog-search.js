@@ -39,7 +39,7 @@ if (active_page == 'catalog') {
 			if (!button.data('expanded')) {
 				button.data('expanded', '1');
 				button.text('Close');
-				$('.catalog_search').append(' <input id="search_field" style="border: inset 1px;">');
+				$('.catalog_search').append(' <input id="search_field" style="height:14px">');
 				$('#search_field').focus();
 			} else {
 				button.removeData('expanded');

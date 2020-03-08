@@ -6,7 +6,7 @@ if (window.Options && Options.get_tab('general')) {
 	Options.extend_tab("general", "<label id='show_top_boards'><input type='checkbox' /> "+_('Show top boards')+"</label>");
 
 	if (typeof localStorage.show_top_boards === 'undefined') {
-		localStorage.show_top_boards = 'false';
+		localStorage.show_top_boards = 'true';
 		var show_top = JSON.parse(localStorage.show_top_boards);
 	}
 
@@ -23,16 +23,16 @@ if (window.Options && Options.get_tab('general')) {
 
 function handle_boards(data) {
 	$.each(data, function(k, v) {
-		boards.push('<a href="/'+v.uri+(window.active_page === 'catalog' ? '/catalog.html' : '/index.html')+'" title="'+v.title+'">'+v.uri+'</a>');
+		boards.push('<a href="'+(inMod ? "mod.php?" : "")+'/'+v.uri+(window.active_page === 'catalog' ? '/catalog' : '/')+'" title="'+v.title+'">'+v.uri+'</a>');
 	})
 
 	if (boards[0]) {
-		$('.sub[data-description="1"]').after('<span class="sub" data-description="4"> [ '+boards.slice(0,25).join(" / ")+' ] </span>');
+		$('.sub[data-description="3"]').after('<span class="sub" data-description="4"> [ '+boards.slice(0,25).join(" / ")+' ] </span>');
 	}
 }
 
 if (!(window.location.pathname != '' && window.location.pathname != '/' && window.location.pathname != '/index.html' && typeof show_top !== "undefined" && !show_top)) {
-	$.getJSON("https://8ch.net/boards-top20.json", handle_boards)
+	$.getJSON("/boards-top20.json", handle_boards)
 }
 
 });

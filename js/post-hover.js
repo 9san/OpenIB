@@ -139,7 +139,7 @@ onready(function(){
 			if(post.length > 0) {
 				start_hover($(this));
 			} else {
-				var url = link.attr('href').replace(/#.*$/, '').replace('.html', '.json');
+				var url = link.attr('href').replace(/#.*$/, 'x').replace('x', '.json');
 				var dataPromise = getPost(id, url);
 
 				dataPromise.done(function (data) {
@@ -154,7 +154,9 @@ onready(function(){
 							'fsize': data.fsize,
 							'filename': data.filename,
 							'ext': data.ext,
-							'tim': data.tim
+							'tim': data.tim,
+							'spoiler': data.spoiler,
+							'deleted': data.deleted
 						};
 
 						if ('h' in data) {
@@ -164,11 +166,11 @@ onready(function(){
 						} else {
 							file.isImage = false;
 						}
-						// since response doens't indicate spoilered files,
-						// we'll just make do by assuming any image with 128*128px thumbnail is spoilered.
-						// which is probably 99% of the cases anyway.
-						file.isSpoiler = (data.tn_h == 128 && data.tn_w == 128);
-
+						
+						file.isSpoiler = data.spoiler;
+						file.isDeleted = data.deleted;
+						
+						
 						file_array.push(file);
 					};
 
@@ -213,24 +215,18 @@ onready(function(){
 							var thumb_url;
 							var file_ext = this.ext;
 
-							if (this.isImage && !this.isSpoiler) {
-
-								// at some point around 28/29th of Jan, 2015; all the newly  generated thumbnails switched to using jpg
-								// this is a quick hack to ensure that external preview (mostly) works with old and new posts
-
-									// Note: please update if a more accurate timestamp is known 
-								if (data.last_modified > 1422489600) {
-									this.ext = '.jpg';
-								} else {
-									if (this.ext === '.webm' || this.ext === '.mp4' || this.ext === '.jpeg') {
-										this.ext = '.jpg';
-									}
-								}
-
+							if (!this.isImage) {
+								thumb_url = '/static/assets/' + board + '/static/file.png';
+							}
+							else if (this.isSpoiler) {
+								thumb_url = '/static/assets/' + board + '/spoiler.png';
+							}
+							else if (this.isDeleted) {
+								thumb_url = '/static/assets/'+ board +'/deleted.png';
+							}
+							else if (this.isImage) {
+								this.ext = '.webp';
 								thumb_url = '/'+ board +'/thumb/' + this.tim + this.ext;
-
-							} else {
-								thumb_url = (this.isSpoiler) ? '/static/spoiler.png' : '/static/file.png';
 							}
 
 							// truncate long filenames
@@ -239,12 +235,35 @@ onready(function(){
 							}
 
 							// file infos
+							if (!this.isSpoiler && !this.isDeleted) {
 							var $ele = $('<div class="file">')
 										.append($('<p class="fileinfo">')
 											.append('<span>File: </span>')
 											.append('<a>'+ this.filename + file_ext +'</a>')
 											.append('<span class="unimportant"> ('+ bytesToSize(this.fsize) +', '+ this.w +'x'+ this.h +')</span>')
 										);
+										// add nofile here
+							} else if (this.isSpoiler) {
+							var $ele = $('<div class="file">')
+										.append($('<p class="fileinfo">')
+											.append('<span>Spoiler: </span>')
+											.append('<a>'+ this.filename + file_ext +'</a>')
+											.append('<span class="unimportant"> ('+ bytesToSize(this.fsize) +', '+ this.w +'x'+ this.h +')</span>')
+										);
+							}	else if (this.isDeleted) {
+							var $ele = $('<div class="file">')
+										this.thumb_w = 140;
+										this.thumb_h = 50;
+							}	
+							else {
+							var $ele = $('<div class="file">')
+										.append($('<p class="fileinfo">')
+											.append('<span>File: </span>')
+											.append('<a>'+ this.filename + file_ext +'</a>')
+											.append('<span class="unimportant"> ('+ bytesToSize(this.fsize) +', '+ this.w +'x'+ this.h +')</span>')
+										);		
+							}					
+										
 							if (multifile) $ele.addClass('multifile').css('width', this.thumb_w + 30);
 
 							// image

@@ -7,7 +7,7 @@
  *   $config['additional_javascript'][] = 'js/jquery.min.js';
  *   $config['additional_javascript'][] = 'js/comment-toolbar.js';
  */
-if (active_page == 'thread' || active_page == 'index') {
+if (active_page == 'thread' || active_page == 'index' || active_page == 'page' || active_page == 'ukko') {
 	var formatText = (function($){
 		"use strict";
 		var self = {};
@@ -304,11 +304,11 @@ if (active_page == 'thread' || active_page == 'index') {
 				// Descriptor row
 				Options.extend_tab('formatting', '\
 					<span class="format_option" style="margin-left:25px;">Name</span>\
-					<span class="format_option" style="margin-left:45px;" title="Multi-line: Allow formatted area to contain linebreaks.">ML</span>\
+					<span class="format_option" style="margin-left:15px;" title="Multi-line: Allow formatted area to contain linebreaks.">ML</span>\
 					<span class="format_option" style="margin-left:0px;" title="Exclusive-line: Require formatted area to start after and end before a linebreak.">EL</span>\
-					<span class="format_option" style="margin-left:25px;" title="Text injected at the start of a format area.">Prefix</span>\
-					<span class="format_option" style="margin-left:60px;" title="Text injected at the end of a format area.">Suffix</span>\
-					<span class="format_option" style="margin-left:40px;" title="Optional keybind value to allow keyboard shortcut access.">Key</span>\
+					<span class="format_option" style="margin-left:10px;" title="Text injected at the start of a format area.">Prefix</span>\
+					<span class="format_option" style="margin-left:30px;" title="Text injected at the end of a format area.">Suffix</span>\
+					<span class="format_option" style="margin-left:20px;" title="Optional keybind value to allow keyboard shortcut access.">Key</span>\
 				');
 				
 				// Rule rows

@@ -53,7 +53,7 @@ var main = function(){
 
   fix_choice();
 
-  var allboards = $("<label><input type='checkbox' id='css-all-boards'> "+_("Apply to all boards, not just this one")+" (/"+board_name+"/)</label>").appendTo(tab.content).find('input');
+  var allboards = $("<label id='css-all-boards'><input type='checkbox' id='css-all-boards'> "+_("Apply to all boards, not just this one")+" (/"+board_name+"/)</label>").appendTo(tab.content).find('input');
 
   if (localStorage.stylesheets_all_boards === "true") allboards.prop('checked', 'checked');
 
@@ -120,7 +120,7 @@ var apply_css = function() {
 var update_textarea = function() {
   if (!localStorage.user_css) {
     textarea.text("/* "+_("Enter here your own CSS rules...")+" */\n" +
-                  "/* "+_("If you want to make a redistributable style, be sure to\nhave a Yotsuba B theme selected.")+" */\n" +
+                  "/* "+_("If you want to make a redistributable style, be sure to\nhave a Yotsuba Blue theme selected.")+" */\n" +
                   "/* "+_("These will be applied on top of whatever theme you choose below.")+" */\n" +
                   "/* "+_("You can include CSS files from remote servers, for example:")+" */\n" +
                   '/* @import "http://example.com/style.css"; */');

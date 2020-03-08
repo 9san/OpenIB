@@ -50,9 +50,9 @@ $(document).ready(function(){
 	}
 	if (window.Options && Options.get_tab('general')) {
 		Options.extend_tab("general", "<fieldset id='auto-update-fs'><legend>"+_("Auto update")+"</legend>"
-		+ ('<label id="auto-thread-update"><input type="checkbox">' + _('Auto update thread') + '</label>')
-		+ ('<label id="auto_thread_desktop_notifications"><input type="checkbox">' + _('Show desktop notifications when users quote me') + '</label>')
-		+ ('<label id="auto_thread_desktop_notifications_all"><input type="checkbox">' + _('Show desktop notifications on all replies') + '</label>')
+		+ ('<label id="auto-thread-update"><input type="checkbox">' + _(' Auto update thread') + '</label>')
+		+ ('<label id="auto_thread_desktop_notifications"><input type="checkbox">' + _(' Show desktop notifications when users quote me') + '</label>')
+		+ ('<label id="auto_thread_desktop_notifications_all"><input type="checkbox">' + _(' Show desktop notifications on all replies') + '</label>')
 		+ '</fieldset>');
 
 		$('#auto-thread-update>input').on('click', function() {
@@ -104,7 +104,8 @@ $(document).ready(function(){
 	var countdown_interval;
 
 	// Add an update link
-	$('span#thread-links').append("<span id='updater'><a href='#' id='update_thread'>["+_("Update")+"]</a> (<input type='checkbox' id='auto_update_status'> "+_("Auto")+") <span id='update_secs'></span></span>");
+	$('span#thread-links').append("<span id='updater'>[<a href='#' id='update_thread'>Update</a>] <label for='auto_update_status'>[<input type='checkbox' id='auto_update_status'> "+_("Auto")+"]</label> <span id='update_secs'></span></span>");
+	//$('#updater').clone().appendTo('#thread-links-top'); fix later
 
 	// Set the updater checkbox according to user setting
 	if (localStorage.auto_thread_update === 'true') {

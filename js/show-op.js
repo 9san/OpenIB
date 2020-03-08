@@ -33,7 +33,7 @@ $(document).ready(function(){
 				return;
 			
 			if (postID == OP) {
-				$(this).after(' <small>(OP)</small>');
+				$(this).append(' (OP)');
 			}
 		});
 	};
