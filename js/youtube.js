@@ -47,6 +47,14 @@ $(document).ready(function(){
 			localStorage.youtube_size = JSON.stringify(our_yt);
 		});
 	}
+	
+	
+	// youtube-embed.js. doesn't seem to work
+	tb_settings['youtube_embed'] = {
+		player_width:our_yt.width+'px',
+		player_height:our_yt.height+'px'
+	};
+	
 
 	var do_embed_yt = function(tag) {
 		if (typeof our_yt === "undefined") {
