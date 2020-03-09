@@ -2079,7 +2079,7 @@ div.module, div.ban {
 }
 .desktop-play {
 	margin-left: -212px;
-	margin-top: 17px;
+	margin-top: 2px;
 	margin-right: 69px;
 	width: 141px;
 	height: 141px;
@@ -2087,10 +2087,11 @@ div.module, div.ban {
 .mobile-play {
 	display: none;
 	position:absolute;
+	margin-top: -8px;
 }
 div.post.reply .desktop-play {
 	margin-left: -140px;
-	margin-top: -5px;
+	margin-top: -12px;
 	height: 106px;
 	width: 106px;
 	margin-right: 20px;
@@ -2100,13 +2101,12 @@ div.post.reply .desktop-play {
 }
 .desktop-style .post-image#yt {
 	margin: 0px 20px 10px 20px;
-	width: 255px;
-	height: 191px;
+	width: 255px!important;
+	height: 144px!important;
 }
 div.post.reply .post-image#yt {
     width: 128px!important;
-	height: 82px!important;
-    max-width: 128px;
+	height: 72px!important;
     margin: 0 20px 0 0;
 }
 .hide-thread-linkz {
@@ -2476,21 +2476,6 @@ only screen and (                min-resolution: 2dppx) {
 	  display: inline-block;
 	  width: 100%;
 	}
-	.desktop-play {
-		display: none;
-	}
-	.mobile-play {
-		display: block;
-		height: 100px;
-		width: 100px;
-		margin-left: 20px;
-	}
-	div.post.reply .mobile-play {
-		height: 64px;
-		width: 64px;
-		margin-left: 8px;
-		margin-top: -6px;
-	}
 	div.post.reply iframe {
 	  margin: 0px 0px 10px 0px!important;
 	}
@@ -2506,14 +2491,28 @@ only screen and (                min-resolution: 2dppx) {
 	* {
 	  outline:none;
 	}
+	.desktop-play {
+		display: none;
+	}
+	.mobile-play {
+		display: block;
+		height: 100px;
+		width: 100px;
+		margin-left: 20px;
+	}
+	div.post.reply .mobile-play {
+		height: 64px;
+		width: 64px;
+		margin-left: 8px;
+		margin-top: -8px;
+	}
 	div.post.op .post-image#yt {
 		width: 128px!important;
-		height: 82px!important;
+		height: 72px!important;
 	}
 	div.post.reply .post-image#yt {
 		width: 64px!important;
-		height: 40px!important;
-		object-fit: scale-down;
+		height: 38px!important;
 	}
 	div.post.body-not-empty span.body-line.ltr {
 		line-height: 20px;
