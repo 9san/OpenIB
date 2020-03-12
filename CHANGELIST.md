@@ -1,6 +1,13 @@
 # Changelist
 
-#### Release 1.0
+#### Release 1.0.1 - 03.12.2020
+- Install.sql torlist bug workaround
+- Youtube resolution fixes
+- Option to reset thread bump after last post deleted. Thanks, [John Clever](https://github.com/vichan-devel/vichan/pull/353) from vichan-devel!
+- Auto-reload.js error icon on pruned thread.
+- Various fixes (dio, dashboard, etc)
+
+#### Release 1.0b - 03.08.2020
 
 - Active development!
 - Open source
